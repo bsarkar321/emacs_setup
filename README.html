@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-07-16 Sun 18:45 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emacs Setup for macOS and Linux</title>
+<meta name="author" content="Bidipta Sarkar" />
+<meta name="description" content="Org mode emacs setup" />
+<meta name="keywords" content="org, document, emacs, config, conda, tramp" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/readtheorg.css"/>
+<script type="text/javascript" src="src/lib/js/jquery.min.js"></script>
+<script type="text/javascript" src="src/lib/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="src/readtheorg_theme/js/readtheorg.js"></script>
+<style> .figure p {text-align: center;}</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Emacs Setup for macOS and Linux</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org58b8636">1. Base Installation</a>
+<ul>
+<li><a href="#org01a9133">1.1. macOS</a></li>
+<li><a href="#org3b0164b">1.2. Linux [WIP]</a></li>
+</ul>
+</li>
+<li><a href="#org4c5c998">2. Conda Setup</a></li>
+<li><a href="#org1a22386">3. Install this Config</a></li>
+<li><a href="#org034de65">4. Tips for Using Emacs</a></li>
+<li><a href="#orgffa698e">5. Early Init</a></li>
+<li><a href="#orgd96b23c">6. Init</a>
+<ul>
+<li><a href="#org8c88c56">6.1. Package Support</a></li>
+<li><a href="#org005f40d">6.2. Basic Customization</a></li>
+<li><a href="#org64a43fd">6.3. macOS Support</a></li>
+<li><a href="#org4973185">6.4. Xwidgets Convenience functions</a></li>
+<li><a href="#orgc16934d">6.5. Writing</a>
+<ul>
+<li><a href="#org9384357">6.5.1. Org Mode</a></li>
+<li><a href="#orgd6f733a">6.5.2. LaTeX</a></li>
+</ul>
+</li>
+<li><a href="#orgbd99392">6.6. Programming</a>
+<ul>
+<li><a href="#orgf88f7dc">6.6.1. Elisp Support</a></li>
+<li><a href="#org098a4d5">6.6.2. Python Support</a></li>
+<li><a href="#orgf922988">6.6.3. Tramp + Conda</a></li>
+</ul>
+</li>
+<li><a href="#org1476e5b">6.7. Wrap up</a></li>
+</ul>
+</li>
+<li><a href="#org6af1289">7. Acknowledgements</a></li>
+<li><a href="#orgd052163">8. License</a></li>
+</ul>
+</div>
+</div>
+<p>
+This file is a <a href="https://en.wikipedia.org/wiki/Literate_programming">literate program</a> for my emacs configuration. It details how to get started with my setup on macOS and Linux, which includes:
+</p>
+<ul class="org-ul">
+<li>Installing emacs with GUI and web browsing support</li>
+<li>Support for conda virtual environments, including on virtual machines</li>
+<li>LaTeX setup with synctex</li>
+<li>Eglot as an LSP</li>
+</ul>
+
+
+<div id="org38e5b1a" class="figure">
+<p><img src="emacs_icon.png" alt="emacs_icon.png" width="100px" />
+</p>
+</div>
+
+<div id="outline-container-org58b8636" class="outline-2">
+<h2 id="org58b8636"><span class="section-number-2">1.</span> Base Installation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This section goes over the base installation procedure for vanilla emacs and LaTeX.
+</p>
+</div>
+
+<div id="outline-container-org01a9133" class="outline-3">
+<h3 id="org01a9133"><span class="section-number-3">1.1.</span> macOS</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+First, install homebrew if it is not already installed.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">/bin/bash -c <span style="color: #98C379;">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span>
+</pre>
+</div>
+
+<p>
+Next, install <a href="https://github.com/d12frosted/homebrew-emacs-plus">emacs-plus</a>. Check the link for more compilation options in case you need different features.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">brew tap d12frosted/emacs-plus
+brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-native-comp --with-poll
+</pre>
+</div>
+
+<p>
+At this step, I also recommend installing basictex for pdflatex support.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">brew install --cask basictex
+</pre>
+</div>
+
+<p>
+To install packages during compilation failures, please refer to <a href="https://www.ctan.org/">CTAN</a> and install packages using tlmgr.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">sudo tlmgr update --self
+sudo tlmgr install wrapfig capt-of
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3b0164b" class="outline-3">
+<h3 id="org3b0164b"><span class="section-number-3">1.2.</span> Linux [WIP]</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Typically can be downloaded from package manager. Note that the latest "stable" version of linux may not have all the features used in this config. For arch-based distros, you can install <a href="https://aur.archlinux.org/packages/emacs-git">emacs-git</a> from the AUR.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4c5c998" class="outline-2">
+<h2 id="org4c5c998"><span class="section-number-2">2.</span> Conda Setup</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniforge through homebrew, I needed to run the following script first.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">ln -s /usr/local/Caskroom/miniforge/base/envs ~/.virtualenvs
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org1a22386" class="outline-2">
+<h2 id="org1a22386"><span class="section-number-2">3.</span> Install this Config</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+If you have existing configuration files, I strongly recommend creating a backup of your .emacs.d directory. For instance, I just called <code>mv ~/.emacs.d ~/emacs_old</code> to save my old configuration.
+</p>
+
+<p>
+Next, clone this repo and set up symbolic links so changes to this repo are reflected in the emacs init file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">git clone https://github.com/bsarkar321/emacs_setup
+<span style="color: #56B6C2;">cd</span> emacs_setup
+
+ln -s <span style="color: #98C379;">"$(pwd)"</span>/early-init.el ~/.emacs.d/early-init.el
+ln -s <span style="color: #98C379;">"$(pwd)"</span>/init.el ~/.emacs.d/init.el
+</pre>
+</div>
+
+<p>
+After this point, your emacs should be fully set up using my configuration! You can launch emacs and open this file from the terminal by calling <code>emacs README.org</code>. Note that packages will be installed the first time you set up, and the config may not be fully loaded. However, if you close emacs and open it up again, you should see my full setup loaded.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org034de65" class="outline-2">
+<h2 id="org034de65"><span class="section-number-2">4.</span> Tips for Using Emacs</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+[WIP]
+</p>
+
+<p>
+The rest of this file directly contains the code for the early-init and init files. You can edit this document directly, and the changes will be applied upon saving in emacs (if you accept the question that pop up in the minibuffer).
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgffa698e" class="outline-2">
+<h2 id="orgffa698e"><span class="section-number-2">5.</span> Early Init</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+This early init uses some tricks from Doom Emacs to reduce startup time. It also changes the default frame at startup, which is faster than changing it after the frame is initialized. Specifically:
+</p>
+<ul class="org-ul">
+<li>tool-bar-lines (the top bar with gui icons) is disabled</li>
+<li>vertical-scroll-bars are disabled</li>
+<li>the title bar is transparent (has same color as rest of emacs)</li>
+<li>The width and height are half the screen by default</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr"> 1: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">early-init.el --- Early initialization</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">Commentary:</span>
+<span class="linenr"> 4: </span><span style="color: #5C6370; font-style: italic;">;;</span>
+<span class="linenr"> 5: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Using early-init for speed.</span>
+<span class="linenr"> 6: </span><span style="color: #5C6370; font-style: italic;">;;</span>
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">Code:</span>
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span>(<span style="color: #C678DD;">setq</span> gc-cons-threshold most-positive-fixnum
+<span class="linenr">11: </span>      gc-cons-percentage 0.6)
+<span class="linenr">12: </span>
+<span class="linenr">13: </span>(add-hook 'emacs-startup-hook
+<span class="linenr">14: </span>          (<span style="color: #C678DD;">lambda</span> ()
+<span class="linenr">15: </span>            (<span style="color: #C678DD;">setq</span> gc-cons-threshold 16777216
+<span class="linenr">16: </span>                  gc-cons-percentage 0.1)))
+<span class="linenr">17: </span>
+<span class="linenr">18: </span>(<span style="color: #C678DD;">defun</span> <span style="color: #61AFEF;">doom-defer-garbage-collection-h</span> ()
+<span class="linenr">19: </span>  <span style="color: #98C379;">"Defer gc."</span>
+<span class="linenr">20: </span>  (<span style="color: #C678DD;">setq</span> gc-cons-threshold most-positive-fixnum))
+<span class="linenr">21: </span>
+<span class="linenr">22: </span>(<span style="color: #C678DD;">defun</span> <span style="color: #61AFEF;">doom-restore-garbage-collection-h</span> ()
+<span class="linenr">23: </span>  <span style="color: #98C379;">"Restore gc."</span>
+<span class="linenr">24: </span>  (run-at-time
+<span class="linenr">25: </span>   1 nil (<span style="color: #C678DD;">lambda</span> () (<span style="color: #C678DD;">setq</span> gc-cons-threshold 16777216))))
+<span class="linenr">26: </span>
+<span class="linenr">27: </span>(add-hook 'minibuffer-setup-hook #'doom-defer-garbage-collection-h)
+<span class="linenr">28: </span>(add-hook 'minibuffer-exit-hook #'doom-restore-garbage-collection-h)
+<span class="linenr">29: </span>
+<span class="linenr">30: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">package-initialize already in init.el</span>
+<span class="linenr">31: </span>(<span style="color: #C678DD;">setq</span> package-enable-at-startup nil)
+<span class="linenr">32: </span>
+<span class="linenr">33: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Inhibit resizing frame</span>
+<span class="linenr">34: </span>(<span style="color: #C678DD;">setq</span> frame-inhibit-implied-resize t)
+<span class="linenr">35: </span>
+<span class="linenr">36: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Disable before actual init</span>
+<span class="linenr">37: </span>(<span style="color: #C678DD;">push</span> '(tool-bar-lines . 0) default-frame-alist)
+<span class="linenr">38: </span>(<span style="color: #C678DD;">push</span> '(vertical-scroll-bars) default-frame-alist)
+<span class="linenr">39: </span>(<span style="color: #C678DD;">when</span> (<span style="color: #C678DD;">featurep</span> '<span style="color: #56B6C2;">ns</span>)
+<span class="linenr">40: </span>  (<span style="color: #C678DD;">push</span> '(ns-transparent-titlebar . t) default-frame-alist))
+<span class="linenr">41: </span>(<span style="color: #C678DD;">push</span> '(width . 0.5) default-frame-alist)
+<span class="linenr">42: </span>(<span style="color: #C678DD;">push</span> '(height . 0.5) default-frame-alist)
+<span class="linenr">43: </span>
+<span class="linenr">44: </span><span style="color: #5C6370; font-style: italic;">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="linenr">45: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">early-init.el ends here</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd96b23c" class="outline-2">
+<h2 id="orgd96b23c"><span class="section-number-2">6.</span> Init</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+The code below gets constructed into the init.el, where most of the customization lies.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr"> 1: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">.emacs.d/init.el --- Init for Emacs</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">Commentary:</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Lightweight Emacs config file to make Emacs look like atom</span>
+<span class="linenr"> 6: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">while having tramp/python/c++/latex support.</span>
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">Code:</span>
+<span class="linenr"> 9: </span>
+<span class="linenr">10: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">This is only here to resolve flymake complaints</span>
+<span class="linenr">11: </span>(<span style="color: #C678DD;">eval-when-compile</span>
+<span class="linenr">12: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">xwwp-search-prefix</span>)
+<span class="linenr">13: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">org-image-actual-width</span>)
+<span class="linenr">14: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">org-support-shift-select</span>)
+<span class="linenr">15: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">org-latex-listings</span>)
+<span class="linenr">16: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">org-src-fontify-natively</span>)
+<span class="linenr">17: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">org-file-apps</span>)
+<span class="linenr">18: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-auto-save</span>)
+<span class="linenr">19: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-parse-self</span>)
+<span class="linenr">20: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-view-program-selection</span>)
+<span class="linenr">21: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-source-correlate-start-server</span>)
+<span class="linenr">22: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-source-correlate-method</span>)
+<span class="linenr">23: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">TeX-source-correlate-mode</span>)
+<span class="linenr">24: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">reftex-plug-into-AUCTeX</span>)
+<span class="linenr">25: </span>  (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">reftex-bibliography-commands</span>)
+<span class="linenr">26: </span>  (<span style="color: #C678DD;">declare-function</span> pdf-loader-install nil)
+<span class="linenr">27: </span>  (<span style="color: #C678DD;">declare-function</span> TeX-revert-document-buffer nil)
+<span class="linenr">28: </span>  (<span style="color: #C678DD;">declare-function</span> pyvenv-mode nil)
+<span class="linenr">29: </span>  (<span style="color: #C678DD;">declare-function</span> pyvenv-workon-home nil)
+<span class="linenr">30: </span>  )
+<span class="linenr">31: </span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org8c88c56" class="outline-3">
+<h3 id="org8c88c56"><span class="section-number-3">6.1.</span> Package Support</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+Here I define that melpa should be added to the package archives, which has a larger repository of user-created packages.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">32: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">33: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">MELPA Package Support</span>
+<span class="linenr">34: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">35: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Enables basic packing support</span>
+<span class="linenr">36: </span>(<span style="color: #C678DD;">require</span> '<span style="color: #56B6C2;">package</span>)
+<span class="linenr">37: </span>
+<span class="linenr">38: </span>(add-to-list 'package-archives '(<span style="color: #98C379;">"melpa"</span> . <span style="color: #98C379;">"https://melpa.org/packages/"</span>) t)
+<span class="linenr">39: </span>
+<span class="linenr">40: </span>(package-initialize)
+<span class="linenr">41: </span>
+<span class="linenr">42: </span>(<span style="color: #C678DD;">when</span> (not package-archive-contents) (package-refresh-contents))
+<span class="linenr">43: </span>
+<span class="linenr">44: </span>(<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">my-packages</span>
+<span class="linenr">45: </span>  '(atom-one-dark-theme
+<span class="linenr">46: </span>    htmlize
+<span class="linenr">47: </span>    pdf-tools
+<span class="linenr">48: </span>    pyvenv
+<span class="linenr">49: </span>    use-package
+<span class="linenr">50: </span>    xwwp))
+<span class="linenr">51: </span>
+<span class="linenr">52: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Iterate on packages and install missing ones</span>
+<span class="linenr">53: </span>(<span style="color: #C678DD;">dolist</span> (pkg my-packages)
+<span class="linenr">54: </span>  (<span style="color: #C678DD;">unless</span> (package-installed-p pkg)
+<span class="linenr">55: </span>    (package-install pkg)))
+<span class="linenr">56: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org005f40d" class="outline-3">
+<h3 id="org005f40d"><span class="section-number-3">6.2.</span> Basic Customization</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+Adding basic customization options, like loading the theme and setting a custom-file so it does not conflict with this init file.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">57: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">58: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Basic Customization</span>
+<span class="linenr">59: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">60: </span>
+<span class="linenr">61: </span>(load-theme 'atom-one-dark t)
+<span class="linenr">62: </span>
+<span class="linenr">63: </span>(<span style="color: #C678DD;">setq</span> inhibit-startup-message t)    <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Hide the startup message</span>
+<span class="linenr">64: </span>(<span style="color: #C678DD;">setq</span> column-number-mode t)         <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Show column number in mode-line</span>
+<span class="linenr">65: </span>(global-superword-mode t)           <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Superword for all buffers</span>
+<span class="linenr">66: </span>(delete-selection-mode t)           <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Delete when typing over selection</span>
+<span class="linenr">67: </span>(<span style="color: #C678DD;">setq</span> split-height-threshold nil)   <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Do not split by height by default</span>
+<span class="linenr">68: </span>(<span style="color: #C678DD;">setq</span> split-width-threshold 0)      <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Split by width by default</span>
+<span class="linenr">69: </span>(electric-pair-mode t)              <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Default electric pairs (opening parentheses create closing)</span>
+<span class="linenr">70: </span>(<span style="color: #C678DD;">setq</span> use-short-answers t)          <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Use y/n instead of yes or no</span>
+<span class="linenr">71: </span>(<span style="color: #C678DD;">setq</span> make-backup-files nil)        <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Do not save the backup files ~filename</span>
+<span class="linenr">72: </span>
+<span class="linenr">73: </span>(windmove-default-keybindings 'meta)<span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Use option key with arrows to switch which window is active</span>
+<span class="linenr">74: </span>
+<span class="linenr">75: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">separate custom.el so users can set preferences separately</span>
+<span class="linenr">76: </span>(<span style="color: #C678DD;">defconst</span> <span style="color: #E06C75;">custom-file</span> (expand-file-name <span style="color: #98C379;">"custom.el"</span> user-emacs-directory))
+<span class="linenr">77: </span>(load custom-file t)
+<span class="linenr">78: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org64a43fd" class="outline-3">
+<h3 id="org64a43fd"><span class="section-number-3">6.3.</span> macOS Support</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+Enables some mac-specific customization, including full screen with command-control-f, and commenting/uncommenting regions of code with command-/.
+</p>
+
+<p>
+I also use command-option-&lt;arrow-keys&gt; to change the size of the focused window.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr"> 79: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr"> 80: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">macOS Default Keys</span>
+<span class="linenr"> 81: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr"> 82: </span>(<span style="color: #C678DD;">setq</span> mac-option-modifier 'meta
+<span class="linenr"> 83: </span>      mac-command-modifier 'super
+<span class="linenr"> 84: </span>      mac-right-option-modifier 'meta)
+<span class="linenr"> 85: </span>
+<span class="linenr"> 86: </span>(<span style="color: #C678DD;">when</span> (string= system-type <span style="color: #98C379;">"darwin"</span>) (<span style="color: #C678DD;">defvar</span> <span style="color: #E06C75;">dired-use-ls-dired</span> nil))
+<span class="linenr"> 87: </span>
+<span class="linenr"> 88: </span>(<span style="color: #C678DD;">defun</span> <span style="color: #61AFEF;">comment-or-uncomment-region-or-line</span> ()
+<span class="linenr"> 89: </span>  <span style="color: #98C379;">"Comments the region or the current line if there's no active region."</span>
+<span class="linenr"> 90: </span>  (<span style="color: #C678DD;">interactive</span>)
+<span class="linenr"> 91: </span>  (<span style="color: #C678DD;">let</span> (beg end)
+<span class="linenr"> 92: </span>    (<span style="color: #C678DD;">if</span> (region-active-p)
+<span class="linenr"> 93: </span>        (<span style="color: #C678DD;">setq</span> beg (region-beginning) end (region-end))
+<span class="linenr"> 94: </span>      (<span style="color: #C678DD;">setq</span> beg (line-beginning-position) end (line-end-position)))
+<span class="linenr"> 95: </span>    (comment-or-uncomment-region beg end)))
+<span class="linenr"> 96: </span>
+<span class="linenr"> 97: </span>(global-set-key (kbd <span style="color: #98C379;">"s-Z"</span>) 'undo-redo)
+<span class="linenr"> 98: </span>(global-set-key (kbd <span style="color: #98C379;">"s-/"</span>) 'comment-or-uncomment-region-or-line)
+<span class="linenr"> 99: </span>(global-set-key (kbd <span style="color: #98C379;">"C-s-f"</span>) 'toggle-frame-fullscreen)
+<span class="linenr">100: </span>
+<span class="linenr">101: </span>(global-set-key (kbd <span style="color: #98C379;">"M-s-&lt;left&gt;"</span>) 'shrink-window-horizontally)
+<span class="linenr">102: </span>(global-set-key (kbd <span style="color: #98C379;">"M-s-&lt;right&gt;"</span>) 'enlarge-window-horizontally)
+<span class="linenr">103: </span>(global-set-key (kbd <span style="color: #98C379;">"M-s-&lt;up&gt;"</span>) 'shrink-window)
+<span class="linenr">104: </span>(global-set-key (kbd <span style="color: #98C379;">"M-s-&lt;down&gt;"</span>) 'enlarge-window)
+<span class="linenr">105: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4973185" class="outline-3">
+<h3 id="org4973185"><span class="section-number-3">6.4.</span> Xwidgets Convenience functions</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+Use xwwp to have a browser within emacs.
+</p>
+
+<p>
+Note: it is currently a big buggy, especially when multiple windows are created. However it works great for previewing html or testing out websites.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">106: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">107: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">xwwp setup</span>
+<span class="linenr">108: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">109: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">xwwp</span>)
+<span class="linenr">110: </span>(<span style="color: #C678DD;">setq</span> xwwp-search-prefix <span style="color: #98C379;">"https://duckduckgo.com/?q="</span>)
+<span class="linenr">111: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc16934d" class="outline-3">
+<h3 id="orgc16934d"><span class="section-number-3">6.5.</span> Writing</h3>
+<div class="outline-text-3" id="text-6-5">
+<p>
+Enable line numbers, word wrap, and spell checking for text modes.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">112: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">113: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Writing Modes</span>
+<span class="linenr">114: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">115: </span>(<span style="color: #C678DD;">defun</span> <span style="color: #61AFEF;">human-text-on</span> ()
+<span class="linenr">116: </span>  <span style="color: #98C379;">"Turn on human text options."</span>
+<span class="linenr">117: </span>  (turn-on-visual-line-mode)
+<span class="linenr">118: </span>  (display-line-numbers-mode)
+<span class="linenr">119: </span>  )
+<span class="linenr">120: </span>
+<span class="linenr">121: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Txt support</span>
+<span class="linenr">122: </span>(add-hook 'text-mode-hook #'human-text-on)
+<span class="linenr">123: </span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org9384357" class="outline-4">
+<h4 id="org9384357"><span class="section-number-4">6.5.1.</span> Org Mode</h4>
+<div class="outline-text-4" id="text-6-5-1">
+<p>
+Writing for org mode documents, like this configuration file! Enables opening web links within emacs, along with some other customization options to make org mode easier for me to work with.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">124: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Org support</span>
+<span class="linenr">125: </span>(<span style="color: #C678DD;">setq</span> org-image-actual-width nil)
+<span class="linenr">126: </span>(add-hook 'org-mode-hook #'human-text-on)
+<span class="linenr">127: </span>(<span style="color: #C678DD;">setq</span> org-support-shift-select t)
+<span class="linenr">128: </span>(<span style="color: #C678DD;">setq</span> org-latex-listings t)
+<span class="linenr">129: </span>
+<span class="linenr">130: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">htmlize</span>)
+<span class="linenr">131: </span>(<span style="color: #C678DD;">setq</span> org-src-fontify-natively t)
+<span class="linenr">132: </span>(<span style="color: #C678DD;">setq</span> browse-url-browser-function 'xwwp-browse-url-other-window)
+<span class="linenr">133: </span>(<span style="color: #C678DD;">setq</span> org-file-apps
+<span class="linenr">134: </span>      '((auto-mode . emacs)
+<span class="linenr">135: </span>        (<span style="color: #98C379;">"\\.x?html?\\'"</span> . (<span style="color: #C678DD;">lambda</span> (file link) (xwwp-browse-url-other-window (concat <span style="color: #98C379;">"file://"</span> link))))
+<span class="linenr">136: </span>        (<span style="color: #98C379;">"\\.mp4\\'"</span> . <span style="color: #98C379;">"vlc \"%s\""</span>)))
+<span class="linenr">137: </span>
+<span class="linenr">138: </span>(org-babel-do-load-languages 'org-babel-load-languages
+<span class="linenr">139: </span>                             '(
+<span class="linenr">140: </span>                               (python . t)
+<span class="linenr">141: </span>                               (shell . t)
+<span class="linenr">142: </span>                               ))
+<span class="linenr">143: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd6f733a" class="outline-4">
+<h4 id="orgd6f733a"><span class="section-number-4">6.5.2.</span> LaTeX</h4>
+<div class="outline-text-4" id="text-6-5-2">
+<p>
+Write LaTeX documents with support for previewing and syncing (like double clicking on overleaf previews).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">144: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Latex support</span>
+<span class="linenr">145: </span>(pdf-loader-install)
+<span class="linenr">146: </span>(add-hook 'pdf-view-mode-hook 'pdf-view-dark-minor-mode)
+<span class="linenr">147: </span>
+<span class="linenr">148: </span>(add-hook 'eww-mode-hook 'pdf-tools-install)
+<span class="linenr">149: </span>
+<span class="linenr">150: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">tex</span>
+<span class="linenr">151: </span>  <span style="color: #56B6C2;">:ensure</span> auctex)
+<span class="linenr">152: </span>
+<span class="linenr">153: </span>(add-hook 'LaTeX-mode-hook
+<span class="linenr">154: </span>          (<span style="color: #C678DD;">lambda</span>()
+<span class="linenr">155: </span>            (turn-on-reftex)
+<span class="linenr">156: </span>            (flyspell-mode)
+<span class="linenr">157: </span>            (<span style="color: #C678DD;">setq</span> TeX-auto-save t)
+<span class="linenr">158: </span>            (<span style="color: #C678DD;">setq</span> TeX-parse-self t)
+<span class="linenr">159: </span>            (<span style="color: #C678DD;">setq</span> TeX-view-program-selection '((output-pdf <span style="color: #98C379;">"PDF Tools"</span>))
+<span class="linenr">160: </span>                  TeX-source-correlate-start-server t)
+<span class="linenr">161: </span>            (<span style="color: #C678DD;">setq</span> TeX-source-correlate-method 'synctex)
+<span class="linenr">162: </span>
+<span class="linenr">163: </span>            (<span style="color: #C678DD;">setq</span> TeX-source-correlate-mode t)
+<span class="linenr">164: </span>            (<span style="color: #C678DD;">setq-default</span> TeX-master nil)
+<span class="linenr">165: </span>            (global-set-key (kbd <span style="color: #98C379;">"C-c C-g"</span>) 'pdf-sync-forward-search)
+<span class="linenr">166: </span>            (<span style="color: #C678DD;">setq</span> reftex-plug-into-AUCTeX t)
+<span class="linenr">167: </span>            (<span style="color: #C678DD;">setq</span> reftex-bibliography-commands '(<span style="color: #98C379;">"bibliography"</span> <span style="color: #98C379;">"nobibliography"</span> <span style="color: #98C379;">"addbibresource"</span>))
+<span class="linenr">168: </span>            )
+<span class="linenr">169: </span>          )
+<span class="linenr">170: </span>
+<span class="linenr">171: </span>(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+<span class="linenr">172: </span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd99392" class="outline-3">
+<h3 id="orgbd99392"><span class="section-number-3">6.6.</span> Programming</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+Work with programming modes, even in remote systems using TRAMP.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">173: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">174: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Programming Modes</span>
+<span class="linenr">175: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
+<span class="linenr">176: </span>(add-hook 'prog-mode-hook 'display-line-numbers-mode) <span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Show line numbers for programming languages</span>
+<span class="linenr">177: </span>
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgf88f7dc" class="outline-4">
+<h4 id="orgf88f7dc"><span class="section-number-4">6.6.1.</span> Elisp Support</h4>
+<div class="outline-text-4" id="text-6-6-1">
+<p>
+Elisp syntax checking for emacs configuration files.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">178: </span>(add-hook 'emacs-lisp-mode-hook 'flymake-mode)
+<span class="linenr">179: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org098a4d5" class="outline-4">
+<h4 id="org098a4d5"><span class="section-number-4">6.6.2.</span> Python Support</h4>
+<div class="outline-text-4" id="text-6-6-2">
+<p>
+Python with eglot as an LSP. Note that you may need to pip install a language server after activating a virtual environment.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">180: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Python with eglot</span>
+<span class="linenr">181: </span>(add-hook 'python-mode-hook 'eglot-ensure)
+<span class="linenr">182: </span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgf922988" class="outline-4">
+<h4 id="orgf922988"><span class="section-number-4">6.6.3.</span> Tramp + Conda</h4>
+<div class="outline-text-4" id="text-6-6-3">
+<p>
+Connecting virtual environments on local and remote systems.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">183: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">Conda and TRAMP setup</span>
+<span class="linenr">184: </span>
+<span class="linenr">185: </span>(pyvenv-mode 1)
+<span class="linenr">186: </span>
+<span class="linenr">187: </span>(<span style="color: #C678DD;">defun</span> <span style="color: #61AFEF;">tramp-conda-setup</span>()
+<span class="linenr">188: </span>  <span style="color: #98C379;">"Set up conda for tramp."</span>
+<span class="linenr">189: </span>  (<span style="color: #C678DD;">when</span> default-directory (<span style="color: #C678DD;">if</span> (file-remote-p default-directory)
+<span class="linenr">190: </span>                              (setenv <span style="color: #98C379;">"WORKON_HOME"</span> (concat (file-remote-p default-directory) <span style="color: #98C379;">"~/.virtualenvs"</span>))
+<span class="linenr">191: </span>                            (setenv <span style="color: #98C379;">"WORKON_HOME"</span> <span style="color: #98C379;">"~/.virtualenvs"</span>))))
+<span class="linenr">192: </span>
+<span class="linenr">193: </span>(advice-add #'pyvenv-workon-home <span style="color: #56B6C2;">:before</span> #'tramp-conda-setup)
+<span class="linenr">194: </span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1476e5b" class="outline-3">
+<h3 id="org1476e5b"><span class="section-number-3">6.7.</span> Wrap up</h3>
+<div class="outline-text-3" id="text-6-7">
+<div class="org-src-container">
+<pre class="src src-elisp"><span class="linenr">195: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">emacs -eval "(message (emacs-init-time))" -Q</span>
+<span class="linenr">196: </span>(message (emacs-init-time))
+<span class="linenr">197: </span>
+<span class="linenr">198: </span>(<span style="color: #C678DD;">provide</span> '<span style="color: #56B6C2;">init</span>)
+<span class="linenr">199: </span><span style="color: #5C6370; font-style: italic;">;;; </span><span style="color: #5C6370; font-style: italic;">init.el ends here</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6af1289" class="outline-2">
+<h2 id="org6af1289"><span class="section-number-2">7.</span> Acknowledgements</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Big thanks to:
+</p>
+<ul class="org-ul">
+<li><a href="https://github.com/joseph8th/literatemacs">literatemacs</a> for demonstrating the use of org for the user init</li>
+<li><a href="https://github.com/fniessen/org-html-themes">org-html-themes</a> for providing export functionality to a pretty html theme</li>
+<li><a href="https://stackoverflow.com/a/72498142">Charl Botha</a>'s stackoverflow answer to have separate custom.el</li>
+<li><a href="https://www.emacswiki.org/">Emacs Wiki</a> and the emacs manual for understanding miscellaneous emacs/elisp topics.</li>
+<li>Overleaf latex examples for <a href="https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk">syntax highlighting</a>.</li>
+<li>Various other forums and resources on emacs configurations.<sup><a id="fnr.1" class="footref" href="#fn.1" role="doc-backlink">1</a></sup></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgd052163" class="outline-2">
+<h2 id="orgd052163"><span class="section-number-2">8.</span> License</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+Copyright (C) 2023 Bidipta Sarkar
+</p>
+
+<p>
+Author: Bidipta Sarkar
+</p>
+
+<p>
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+</p>
+
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+</p>
+
+<p>
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+</p>
+
+<a href="http://opensource.org/licenses/GPL-3.0">
+<img src="http://img.shields.io/:license-gpl-blue.svg" alt=":license-gpl-blue.svg" />
+</a>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1" role="doc-backlink">1</a></sup> <div class="footpara" role="doc-footnote"><p class="footpara">
+I know my LaTeX support was largely based on some website, but I can't find it anymore. If anyone knows where to find it, I'll edit this list to add that link. 
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Bidipta Sarkar</p>
+<p class="email">Email: <a href="mailto:bidiptas13@gmail.com">bidiptas13@gmail.com</a></p>
+<p class="date">Created: 2023-07-16 Sun 18:45</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

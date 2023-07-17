@@ -1,0 +1,505 @@
+#+title: Emacs Setup for macOS and Linux
+#+author: Bidipta Sarkar
+#+email: bidiptas13@gmail.com
+#+description: Org mode emacs setup
+#+KEYWORDS:  org, document, emacs, config, conda, tramp
+#+LANGUAGE:  en
+#+OPTIONS:   email:t
+#+startup: inlineimages
+
+#+SETUPFILE: org/theme-readtheorg-local.setup
+
+#+PROPERTY:  header-args :eval never-export
+
+#+LATEX_HEADER: \let\oldsection\section
+#+LATEX_HEADER: \renewcommand{\section}{\clearpage\oldsection}
+#+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \lstset{basicstyle=\small\ttfamily,columns=flexible,breaklines=true}
+
+#+LATEX_HEADER: \usepackage[english]{babel}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \definecolor{mygreen}{rgb}{0,0.6,0}
+#+LATEX_HEADER: \definecolor{mygray}{rgb}{0.5,0.5,0.5}
+#+LATEX_HEADER: \definecolor{mymauve}{rgb}{0.58,0,0.82}
+#+LATEX_HEADER: \lstset{ %
+#+LATEX_HEADER:   backgroundcolor=\color{white},   % choose the background color
+#+LATEX_HEADER:   basicstyle=\footnotesize,        % size of fonts used for the code
+#+LATEX_HEADER:   breaklines=true,                 % automatic line breaking only at whitespace
+#+LATEX_HEADER:   captionpos=b,                    % sets the caption-position to bottom
+#+LATEX_HEADER:   commentstyle=\color{mygreen},    % comment style
+#+LATEX_HEADER:   escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+#+LATEX_HEADER:   keywordstyle=\color{blue},       % keyword style
+#+LATEX_HEADER:   stringstyle=\color{mymauve},     % string literal style
+#+LATEX_HEADER:   frame=tlrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep
+#+LATEX_HEADER: }
+
+#+latex: \clearpage
+
+This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate program]] for my emacs configuration. It details how to get started with my setup on macOS and Linux, which includes:
+- Installing emacs with GUI and web browsing support
+- Support for conda virtual environments, including on virtual machines
+- LaTeX setup with synctex
+- Eglot as an LSP
+
+#+HTML_HEAD_EXTRA: <style> .figure p {text-align: center;}</style>
+
+#+attr_html: :width 100px
+#+attr_latex: :width 100px
+#+attr_org: :width 20
+[[file:emacs_icon.png]]
+#+latex: \clearpage
+
+* Base Installation
+
+This section goes over the base installation procedure for vanilla emacs and LaTeX.
+
+** macOS
+
+First, install homebrew if it is not already installed.
+
+#+begin_src bash
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#+end_src
+
+Next, install [[https://github.com/d12frosted/homebrew-emacs-plus][emacs-plus]]. Check the link for more compilation options in case you need different features.
+
+#+begin_src bash
+  brew tap d12frosted/emacs-plus
+  brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-native-comp --with-poll
+#+end_src
+
+At this step, I also recommend installing basictex for pdflatex support.
+
+#+begin_src bash
+  brew install --cask basictex
+#+end_src
+
+To install packages during compilation failures, please refer to [[https://www.ctan.org/][CTAN]] and install packages using tlmgr.
+
+#+begin_src bash
+  sudo tlmgr update --self
+  sudo tlmgr install wrapfig capt-of
+#+end_src
+
+** Linux [WIP]
+
+Typically can be downloaded from package manager. Note that the latest "stable" version of linux may not have all the features used in this config. For arch-based distros, you can install [[https://aur.archlinux.org/packages/emacs-git][emacs-git]] from the AUR.
+
+* Conda Setup
+
+To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniforge through homebrew, I needed to run the following script first.
+
+#+begin_src bash
+  ln -s /usr/local/Caskroom/miniforge/base/envs ~/.virtualenvs
+#+end_src
+
+
+* Install this Config
+
+If you have existing configuration files, I strongly recommend creating a backup of your .emacs.d directory. For instance, I just called =mv ~/.emacs.d ~/emacs_old= to save my old configuration.
+
+Next, clone this repo and set up symbolic links so changes to this repo are reflected in the emacs init file.
+
+#+begin_src bash
+  git clone https://github.com/bsarkar321/emacs_setup
+  cd emacs_setup
+
+  ln -s "$(pwd)"/early-init.el ~/.emacs.d/early-init.el
+  ln -s "$(pwd)"/init.el ~/.emacs.d/init.el
+#+end_src
+
+After this point, your emacs should be fully set up using my configuration! You can launch emacs and open this file from the terminal by calling =emacs README.org=. Note that packages will be installed the first time you set up, and the config may not be fully loaded. However, if you close emacs and open it up again, you should see my full setup loaded.
+
+* Tips for Using Emacs
+
+[WIP]
+
+The rest of this file directly contains the code for the early-init and init files. You can edit this document directly, and the changes will be applied upon saving in emacs (if you accept the question that pop up in the minibuffer).
+
+* Early Init
+
+This early init uses some tricks from Doom Emacs to reduce startup time. It also changes the default frame at startup, which is faster than changing it after the frame is initialized. Specifically:
+- tool-bar-lines (the top bar with gui icons) is disabled
+- vertical-scroll-bars are disabled
+- the title bar is transparent (has same color as rest of emacs)
+- The width and height are half the screen by default
+
+#+begin_src elisp -n :tangle early-init.el
+  ;;; early-init.el --- Early initialization
+
+  ;;; Commentary:
+  ;;
+  ;; Using early-init for speed.
+  ;;
+
+  ;;; Code:
+
+  (setq gc-cons-threshold most-positive-fixnum
+	gc-cons-percentage 0.6)
+
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (setq gc-cons-threshold 16777216
+		    gc-cons-percentage 0.1)))
+
+  (defun doom-defer-garbage-collection-h ()
+    "Defer gc."
+    (setq gc-cons-threshold most-positive-fixnum))
+
+  (defun doom-restore-garbage-collection-h ()
+    "Restore gc."
+    (run-at-time
+     1 nil (lambda () (setq gc-cons-threshold 16777216))))
+
+  (add-hook 'minibuffer-setup-hook #'doom-defer-garbage-collection-h)
+  (add-hook 'minibuffer-exit-hook #'doom-restore-garbage-collection-h)
+
+  ;; package-initialize already in init.el
+  (setq package-enable-at-startup nil)
+
+  ;; Inhibit resizing frame
+  (setq frame-inhibit-implied-resize t)
+
+  ;; Disable before actual init
+  (push '(tool-bar-lines . 0) default-frame-alist)
+  (push '(vertical-scroll-bars) default-frame-alist)
+  (when (featurep 'ns)
+    (push '(ns-transparent-titlebar . t) default-frame-alist))
+  (push '(width . 0.5) default-frame-alist)
+  (push '(height . 0.5) default-frame-alist)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; early-init.el ends here
+#+end_src
+
+* Init
+
+The code below gets constructed into the init.el, where most of the customization lies.
+
+#+begin_src elisp -n :tangle init.el
+  ;; .emacs.d/init.el --- Init for Emacs
+
+  ;;; Commentary:
+
+  ;; Lightweight Emacs config file to make Emacs look like atom
+  ;; while having tramp/python/c++/latex support.
+
+  ;;; Code:
+
+  ;; This is only here to resolve flymake complaints
+  (eval-when-compile
+    (defvar xwwp-search-prefix)
+    (defvar org-image-actual-width)
+    (defvar org-support-shift-select)
+    (defvar org-latex-listings)
+    (defvar org-src-fontify-natively)
+    (defvar org-file-apps)
+    (defvar TeX-auto-save)
+    (defvar TeX-parse-self)
+    (defvar TeX-view-program-selection)
+    (defvar TeX-source-correlate-start-server)
+    (defvar TeX-source-correlate-method)
+    (defvar TeX-source-correlate-mode)
+    (defvar reftex-plug-into-AUCTeX)
+    (defvar reftex-bibliography-commands)
+    (declare-function pdf-loader-install nil)
+    (declare-function TeX-revert-document-buffer nil)
+    (declare-function pyvenv-mode nil)
+    (declare-function pyvenv-workon-home nil)
+    )
+
+#+end_src
+
+** Package Support
+
+Here I define that melpa should be added to the package archives, which has a larger repository of user-created packages.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; MELPA Package Support
+  ;; ===================================
+  ;; Enables basic packing support
+  (require 'package)
+
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+  (package-initialize)
+
+  (when (not package-archive-contents) (package-refresh-contents))
+
+  (defvar my-packages
+    '(atom-one-dark-theme
+      htmlize
+      pdf-tools
+      pyvenv
+      use-package
+      xwwp))
+
+  ;; Iterate on packages and install missing ones
+  (dolist (pkg my-packages)
+    (unless (package-installed-p pkg)
+      (package-install pkg)))
+
+#+end_src
+
+** Basic Customization
+
+Adding basic customization options, like loading the theme and setting a custom-file so it does not conflict with this init file.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; Basic Customization
+  ;; ===================================
+
+  (load-theme 'atom-one-dark t)
+
+  (setq inhibit-startup-message t)    ;; Hide the startup message
+  (setq column-number-mode t)         ;; Show column number in mode-line
+  (global-superword-mode t)           ;; Superword for all buffers
+  (delete-selection-mode t)           ;; Delete when typing over selection
+  (setq split-height-threshold nil)   ;; Do not split by height by default
+  (setq split-width-threshold 0)      ;; Split by width by default
+  (electric-pair-mode t)              ;; Default electric pairs (opening parentheses create closing)
+  (setq use-short-answers t)          ;; Use y/n instead of yes or no
+  (setq make-backup-files nil)        ;; Do not save the backup files ~filename
+
+  (windmove-default-keybindings 'meta);; Use option key with arrows to switch which window is active
+
+  ;; separate custom.el so users can set preferences separately
+  (defconst custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file t)
+
+#+end_src
+
+** macOS Support
+
+Enables some mac-specific customization, including full screen with command-control-f, and commenting/uncommenting regions of code with command-/.
+
+I also use command-option-<arrow-keys> to change the size of the focused window.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; macOS Default Keys
+  ;; ===================================
+  (setq mac-option-modifier 'meta
+	mac-command-modifier 'super
+	mac-right-option-modifier 'meta)
+
+  (when (string= system-type "darwin") (defvar dired-use-ls-dired nil))
+
+  (defun comment-or-uncomment-region-or-line ()
+    "Comments the region or the current line if there's no active region."
+    (interactive)
+    (let (beg end)
+      (if (region-active-p)
+	  (setq beg (region-beginning) end (region-end))
+	(setq beg (line-beginning-position) end (line-end-position)))
+      (comment-or-uncomment-region beg end)))
+
+  (global-set-key (kbd "s-Z") 'undo-redo)
+  (global-set-key (kbd "s-/") 'comment-or-uncomment-region-or-line)
+  (global-set-key (kbd "C-s-f") 'toggle-frame-fullscreen)
+
+  (global-set-key (kbd "M-s-<left>") 'shrink-window-horizontally)
+  (global-set-key (kbd "M-s-<right>") 'enlarge-window-horizontally)
+  (global-set-key (kbd "M-s-<up>") 'shrink-window)
+  (global-set-key (kbd "M-s-<down>") 'enlarge-window)
+
+#+end_src
+
+** Xwidgets Convenience functions
+
+Use xwwp to have a browser within emacs.
+
+Note: it is currently a big buggy, especially when multiple windows are created. However it works great for previewing html or testing out websites.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; xwwp setup
+  ;; ===================================
+  (use-package xwwp)
+  (setq xwwp-search-prefix "https://duckduckgo.com/?q=")
+
+#+end_src
+
+** Writing
+
+Enable line numbers, word wrap, and spell checking for text modes.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; Writing Modes
+  ;; ===================================
+  (defun human-text-on ()
+    "Turn on human text options."
+    (turn-on-visual-line-mode)
+    (display-line-numbers-mode)
+    )
+
+  ;; Txt support
+  (add-hook 'text-mode-hook #'human-text-on)
+
+#+end_src
+
+*** Org Mode
+
+Writing for org mode documents, like this configuration file! Enables opening web links within emacs, along with some other customization options to make org mode easier for me to work with.
+
+#+begin_src elisp +n :tangle init.el
+  ;; Org support
+  (setq org-image-actual-width nil)
+  (add-hook 'org-mode-hook #'human-text-on)
+  (setq org-support-shift-select t)
+  (setq org-latex-listings t)
+
+  (use-package htmlize)
+  (setq org-src-fontify-natively t)
+  (setq browse-url-browser-function 'xwwp-browse-url-other-window)
+  (setq org-file-apps
+	'((auto-mode . emacs)
+	  ("\\.x?html?\\'" . (lambda (file link) (xwwp-browse-url-other-window (concat "file://" link))))
+	  ("\\.mp4\\'" . "vlc \"%s\"")))
+
+  (org-babel-do-load-languages 'org-babel-load-languages
+			       '(
+				 (python . t)
+				 (shell . t)
+				 ))
+
+#+end_src
+
+*** LaTeX
+
+Write LaTeX documents with support for previewing and syncing (like double clicking on overleaf previews).
+
+#+begin_src elisp +n :tangle init.el
+  ;; Latex support
+  (pdf-loader-install)
+  (add-hook 'pdf-view-mode-hook 'pdf-view-dark-minor-mode)
+
+  (add-hook 'eww-mode-hook 'pdf-tools-install)
+
+  (use-package tex
+    :ensure auctex)
+
+  (add-hook 'LaTeX-mode-hook
+	    (lambda()
+	      (turn-on-reftex)
+	      (flyspell-mode)
+	      (setq TeX-auto-save t)
+	      (setq TeX-parse-self t)
+	      (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		    TeX-source-correlate-start-server t)
+	      (setq TeX-source-correlate-method 'synctex)
+
+	      (setq TeX-source-correlate-mode t)
+	      (setq-default TeX-master nil)
+	      (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
+	      (setq reftex-plug-into-AUCTeX t)
+	      (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	      )
+	    )
+
+  (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+
+#+end_src
+
+** Programming
+
+Work with programming modes, even in remote systems using TRAMP.
+
+#+begin_src elisp +n :tangle init.el
+  ;; ===================================
+  ;; Programming Modes
+  ;; ===================================
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; Show line numbers for programming languages
+
+#+end_src
+
+*** Elisp Support
+
+Elisp syntax checking for emacs configuration files.
+
+#+begin_src elisp +n :tangle init.el
+  (add-hook 'emacs-lisp-mode-hook 'flymake-mode)
+
+#+end_src
+
+*** Python Support
+
+Python with eglot as an LSP. Note that you may need to pip install a language server after activating a virtual environment.
+
+#+begin_src elisp +n :tangle init.el
+  ;; Python with eglot
+  (add-hook 'python-mode-hook 'eglot-ensure)
+
+#+end_src
+
+*** Tramp + Conda
+
+Connecting virtual environments on local and remote systems.
+
+#+begin_src elisp +n :tangle init.el
+  ;; Conda and TRAMP setup
+
+  (pyvenv-mode 1)
+
+  (defun tramp-conda-setup()
+    "Set up conda for tramp."
+    (when default-directory (if (file-remote-p default-directory)
+				(setenv "WORKON_HOME" (concat (file-remote-p default-directory) "~/.virtualenvs"))
+			      (setenv "WORKON_HOME" "~/.virtualenvs"))))
+
+  (advice-add #'pyvenv-workon-home :before #'tramp-conda-setup)
+
+#+end_src
+
+** Wrap up
+
+#+begin_src elisp +n :tangle init.el
+  ;; emacs -eval "(message (emacs-init-time))" -Q
+  (message (emacs-init-time))
+
+  (provide 'init)
+  ;;; init.el ends here
+#+end_src
+
+* Acknowledgements
+
+Big thanks to:
+- [[https://github.com/joseph8th/literatemacs][literatemacs]] for demonstrating the use of org for the user init
+- [[https://github.com/fniessen/org-html-themes][org-html-themes]] for providing export functionality to a pretty html theme
+- [[https://stackoverflow.com/a/72498142][Charl Botha]]'s stackoverflow answer to have separate custom.el
+- [[https://www.emacswiki.org/][Emacs Wiki]] and the emacs manual for understanding miscellaneous emacs/elisp topics.
+- Overleaf latex examples for [[https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk][syntax highlighting]].
+- Various other forums and resources on emacs configurations.[fn:1]
+
+  
+* License
+
+Copyright (C) 2023 Bidipta Sarkar
+
+Author: Bidipta Sarkar
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see http://www.gnu.org/licenses/.
+
+#+html: <a href="http://opensource.org/licenses/GPL-3.0">
+#+html:   <img src="http://img.shields.io/:license-gpl-blue.svg" alt=":license-gpl-blue.svg" />
+#+html: </a>
+
+* Footnotes
+
+[fn:1] I know my LaTeX support was largely based on some website, but I can't find it anymore. If anyone knows where to find it, I'll edit this list to add that link. 
+# Local Variables:
+# eval: (add-hook 'after-save-hook (lambda nil (when (y-or-n-p "Tangle?") (org-babel-tangle)(load-file user-init-file)(org-html-export-to-html))) nil t)
+# End:
