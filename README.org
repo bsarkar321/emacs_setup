@@ -8,6 +8,7 @@
 #+startup: inlineimages
 
 #+SETUPFILE: org/theme-readtheorg-local.setup
+#+EXPORT_FILE_NAME: index
 
 #+PROPERTY:  header-args :eval never-export
 
