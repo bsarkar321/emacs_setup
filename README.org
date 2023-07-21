@@ -44,7 +44,7 @@ This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate pr
 - Eglot as an LSP client for python
 
 
-This file is also exported as a Github pages site [[https://bsarkar321.github.io/emacs_setup/][here]].
+This file is also exported as a Github pages site [[https://bsarkar321.github.io/emacs_setup/][here]]. The repo is [[https://github.com/bsarkar321/emacs_setup][here]].
 
 #+HTML_HEAD_EXTRA: <style> .figure p {text-align: center;}</style>
 
