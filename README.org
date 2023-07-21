@@ -2,7 +2,7 @@
 #+author: Bidipta Sarkar
 #+email: bidiptas13@gmail.com
 #+description: Org mode emacs setup
-#+KEYWORDS:  org, document, emacs, config, conda, tramp
+#+KEYWORDS:  org, emacs, config, conda, tramp
 #+LANGUAGE:  en
 #+OPTIONS:   email:t
 #+startup: inlineimages
@@ -38,17 +38,23 @@
 
 This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate program]] for my emacs configuration. It details how to get started with my setup on macOS and Linux, which includes:
 - Installing emacs with GUI and web browsing support
+- Automatic reloading and html creation for the config
 - Support for conda virtual environments, including on virtual machines
 - LaTeX setup with synctex
-- Eglot as an LSP
+- Eglot as an LSP client for python
+
+
+This file is also exported as a Github pages site [[https://bsarkar321.github.io/emacs_setup/][here]].
 
 #+HTML_HEAD_EXTRA: <style> .figure p {text-align: center;}</style>
 
 #+attr_html: :width 100px
 #+attr_latex: :width 100px
+#+attr_odt: :width 1
 #+attr_org: :width 20
 [[file:emacs_icon.png]]
 #+latex: \clearpage
+#+ODT: <text:p text:style-name="PageBreak"/>
 
 * Base Installation
 
@@ -56,11 +62,21 @@ This section goes over the base installation procedure for vanilla emacs and LaT
 
 ** macOS
 
-First, install homebrew if it is not already installed.
+First, install command line developer tools and homebrew if it is not already installed.
 
 #+begin_src bash
+  xcode-select --install
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 #+end_src
+
+#+begin_quote
+At this point, brew should be installed, but it may not be added to your path yet. You should run the following two commands to add it to your PATH or follow the instructions that are at the end of the homebrew installation.
+
+#+begin_src bash
+  (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+#+end_src
+#+end_quote
 
 Next, install [[https://github.com/d12frosted/homebrew-emacs-plus][emacs-plus]]. Check the link for more compilation options in case you need different features.
 
@@ -73,6 +89,7 @@ At this step, I also recommend installing basictex for pdflatex support.
 
 #+begin_src bash
   brew install --cask basictex
+  eval "$(/usr/libexec/path_helper)"
 #+end_src
 
 To install packages during compilation failures, please refer to [[https://www.ctan.org/][CTAN]] and install packages using tlmgr.
@@ -88,10 +105,28 @@ Typically can be downloaded from package manager. Note that the latest "stable" 
 
 * Conda Setup
 
-To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniforge through homebrew, I needed to run the following script first.
+To install miniconda, I used homebrew's miniconda cask:
 
 #+begin_src bash
-  ln -s /usr/local/Caskroom/miniforge/base/envs ~/.virtualenvs
+  brew install --cask miniconda
+  conda init "$(basename "${SHELL}")"
+#+end_src
+
+#+begin_quote
+After installing miniconda, remember to close and re-open your terminal. When you re-open it, you should be able to see =(base)= before your command line prompt, which confirms that miniconda is active.
+
+I would also recommend creating a test environment in madrona, as follows:
+#+begin_src bash
+  conda create -n testenv python=3.10
+#+end_src
+
+You will be able to activate and deactive this on the terminal, and integrate this environment (along with new and existing conda environments) into emacs.r
+#+end_quote
+
+To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first.
+
+#+begin_src bash
+  ln -s /opt/homebrew/Caskroom/miniconda/base/envs ~/.virtualenvs
 #+end_src
 
 
@@ -105,11 +140,34 @@ Next, clone this repo and set up symbolic links so changes to this repo are refl
   git clone https://github.com/bsarkar321/emacs_setup
   cd emacs_setup
 
+  mkdir ~/.emacs.d
+
   ln -s "$(pwd)"/early-init.el ~/.emacs.d/early-init.el
   ln -s "$(pwd)"/init.el ~/.emacs.d/init.el
 #+end_src
 
-After this point, your emacs should be fully set up using my configuration! You can launch emacs and open this file from the terminal by calling =emacs README.org=. Note that packages will be installed the first time you set up, and the config may not be fully loaded. However, if you close emacs and open it up again, you should see my full setup loaded.
+After this point, your emacs should be fully set up using my configuration! You can launch emacs and open this file from the terminal by calling =emacs README.org=. Note that packages will be installed the first time you set up, and the config may not be fully loaded. At this point, it is normal to see many compilation messages and warnings. However, if you close emacs and open it up again, you should see my full setup loaded.
+
+#+begin_quote
+When opening =README.org= you may see the following warning:
+
+#+begin_src bash
+The local variables list in README.org
+or .dir-locals.el contains values that may not be safe (*).
+
+Do you want to apply it?  You can type
+y  -- to apply the local variables list.
+n  -- to ignore the local variables list.
+!  -- to apply the local variables list, and permanently mark these
+      values (*) as safe (in the future, they will be set automatically.)
+i  -- to ignore the local variables list, and permanently mark these
+      values (*) as ignored
+
+  * eval : (add-hook 'after-save-hook (lambda nil (when (y-or-n-p "Tangle?") (org-babel-tangle) (load-file user-init-file) (org-html-export-to-html))) nil t)
+#+end_src
+
+This is a safety feature to prevent arbitrary code execution in emacs. If you click "y" or "!" you will enable the feature of this file to automatically reload the configuration whenever you save.
+#+end_quote
 
 * Tips for Using Emacs
 
@@ -231,6 +289,7 @@ Here I define that melpa should be added to the package archives, which has a la
   (defvar my-packages
     '(atom-one-dark-theme
       htmlize
+      magit
       pdf-tools
       pyvenv
       use-package

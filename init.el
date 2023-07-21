@@ -44,6 +44,7 @@
 (defvar my-packages
   '(atom-one-dark-theme
     htmlize
+    magit
     pdf-tools
     pyvenv
     use-package
