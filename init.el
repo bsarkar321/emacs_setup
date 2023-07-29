@@ -42,13 +42,14 @@
 (when (not package-archive-contents) (package-refresh-contents))
 
 (defvar my-packages
-  '(atom-one-dark-theme
+  '(atom-one-dark-theme  ;; melpa
     htmlize
     magit
     pdf-tools
-    pyvenv
+    pyvenv               ;; melpa
     use-package
-    xwwp))
+    xwwp                 ;; melpa
+    ))
 
 ;; Iterate on packages and install missing ones
 (dolist (pkg my-packages)
@@ -123,17 +124,17 @@
 (add-hook 'text-mode-hook #'human-text-on)
 
 ;; Org support
-(setq org-image-actual-width nil)
+(setq org-image-actual-width 500)
 (add-hook 'org-mode-hook #'human-text-on)
 (setq org-support-shift-select t)
 (setq org-latex-listings t)
 
 (use-package htmlize)
 (setq org-src-fontify-natively t)
-(setq browse-url-browser-function 'xwwp-browse-url-other-window)
+(setq browse-url-browser-function 'xwidget-webkit-browse-url)
 (setq org-file-apps
       '((auto-mode . emacs)
-	("\\.x?html?\\'" . (lambda (file link) (xwwp-browse-url-other-window (concat "file://" link))))
+	("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
 	("\\.mp4\\'" . "vlc \"%s\"")))
 
 (org-babel-do-load-languages 'org-babel-load-languages
@@ -192,6 +193,11 @@
 			    (setenv "WORKON_HOME" "~/.virtualenvs"))))
 
 (advice-add #'pyvenv-workon-home :before #'tramp-conda-setup)
+
+(setq tramp-use-ssh-controlmaster-options nil)
+(setq tramp-controlmaster-options "-o ControlMaster=auto -o ControlPersist=no")
+(setq exec-path (append exec-path '("/afs/.ir/users/b/i/bidiptas/bin")))
+(setq tramp-verbose 6)
 
 ;; emacs -eval "(message (emacs-init-time))" -Q
 (message (emacs-init-time))

@@ -43,7 +43,6 @@ This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate pr
 - LaTeX setup with synctex
 - Eglot as an LSP client for python
 
-
 This file is also exported as a Github pages site [[https://bsarkar321.github.io/emacs_setup/][here]]. The repo is [[https://github.com/bsarkar321/emacs_setup][here]].
 
 #+HTML_HEAD_EXTRA: <style> .figure p {text-align: center;}</style>
@@ -82,7 +81,7 @@ Next, install [[https://github.com/d12frosted/homebrew-emacs-plus][emacs-plus]].
 
 #+begin_src bash
   brew tap d12frosted/emacs-plus
-  brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-native-comp --with-poll
+  brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-native-comp --with-poll --with-modern-alecive-flatwoken-icon
 #+end_src
 
 At this step, I also recommend installing basictex for pdflatex support.
@@ -287,13 +286,14 @@ Here I define that melpa should be added to the package archives, which has a la
   (when (not package-archive-contents) (package-refresh-contents))
 
   (defvar my-packages
-    '(atom-one-dark-theme
+    '(atom-one-dark-theme  ;; melpa
       htmlize
       magit
       pdf-tools
-      pyvenv
+      pyvenv               ;; melpa
       use-package
-      xwwp))
+      xwwp                 ;; melpa
+      ))
 
   ;; Iterate on packages and install missing ones
   (dolist (pkg my-packages)
@@ -407,17 +407,17 @@ Writing for org mode documents, like this configuration file! Enables opening we
 
 #+begin_src elisp +n :tangle init.el
   ;; Org support
-  (setq org-image-actual-width nil)
+  (setq org-image-actual-width 500)
   (add-hook 'org-mode-hook #'human-text-on)
   (setq org-support-shift-select t)
   (setq org-latex-listings t)
 
   (use-package htmlize)
   (setq org-src-fontify-natively t)
-  (setq browse-url-browser-function 'xwwp-browse-url-other-window)
+  (setq browse-url-browser-function 'xwidget-webkit-browse-url)
   (setq org-file-apps
 	'((auto-mode . emacs)
-	  ("\\.x?html?\\'" . (lambda (file link) (xwwp-browse-url-other-window (concat "file://" link))))
+	  ("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
 	  ("\\.mp4\\'" . "vlc \"%s\"")))
 
   (org-babel-do-load-languages 'org-babel-load-languages
@@ -512,6 +512,11 @@ Connecting virtual environments on local and remote systems.
 
   (advice-add #'pyvenv-workon-home :before #'tramp-conda-setup)
 
+  (setq tramp-use-ssh-controlmaster-options nil)
+  (setq tramp-controlmaster-options "-o ControlMaster=auto -o ControlPersist=no")
+  (setq exec-path (append exec-path '("/afs/.ir/users/b/i/bidiptas/bin")))
+  (setq tramp-verbose 6)
+  
 #+end_src
 
 ** Wrap up
