@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2023-07-27 Thu 18:46 -->
+<!-- 2023-08-16 Wed 19:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Emacs Setup for macOS and Linux</title>
+<title>Emacs Setup for macOS and GNU/Linux</title>
 <meta name="author" content="Bidipta Sarkar" />
 <meta name="description" content="Org mode emacs setup" />
 <meta name="keywords" content="org, emacs, config, conda, tramp" />
@@ -21,50 +21,50 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Emacs Setup for macOS and Linux</h1>
+<h1 class="title">Emacs Setup for macOS and GNU/Linux</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgf0feeca">1. Base Installation</a>
+<li><a href="#org48b3c19">1. Base Installation</a>
 <ul>
-<li><a href="#org45ec63a">1.1. macOS</a></li>
-<li><a href="#org414d8b3">1.2. Linux [WIP]</a></li>
+<li><a href="#org59a8946">1.1. macOS</a></li>
+<li><a href="#org95d3311">1.2. GNU/Linux</a></li>
 </ul>
 </li>
-<li><a href="#org10ccc20">2. Conda Setup</a></li>
-<li><a href="#orgcf98f1b">3. Install this Config</a></li>
-<li><a href="#orgb17e081">4. Tips for Using Emacs</a></li>
-<li><a href="#orgb1c3f62">5. Early Init</a></li>
-<li><a href="#orgc49e4eb">6. Init</a>
+<li><a href="#org49b050e">2. Conda Setup</a></li>
+<li><a href="#org1ae0894">3. Install this Config</a></li>
+<li><a href="#org3abf2bd">4. Tips for Using Emacs</a></li>
+<li><a href="#org69bd640">5. Early Init</a></li>
+<li><a href="#orgc0ac6ec">6. Init</a>
 <ul>
-<li><a href="#org290adaf">6.1. Package Support</a></li>
-<li><a href="#orgf87e0ef">6.2. Basic Customization</a></li>
-<li><a href="#orgad9ddf3">6.3. macOS Support</a></li>
-<li><a href="#org6c3e26d">6.4. Xwidgets Convenience functions</a></li>
-<li><a href="#orge2b05b5">6.5. Writing</a>
+<li><a href="#org9af4b65">6.1. Package Support</a></li>
+<li><a href="#org3ec032b">6.2. Basic Customization</a></li>
+<li><a href="#org52f66f7">6.3. macOS Support</a></li>
+<li><a href="#orgc91208f">6.4. Xwidgets Convenience functions</a></li>
+<li><a href="#orgcd68cb0">6.5. Writing</a>
 <ul>
-<li><a href="#org85a1601">6.5.1. Org Mode</a></li>
-<li><a href="#orgb4eeb33">6.5.2. LaTeX</a></li>
+<li><a href="#orga586a1a">6.5.1. Org Mode</a></li>
+<li><a href="#org2dd835c">6.5.2. LaTeX</a></li>
 </ul>
 </li>
-<li><a href="#org7dafef6">6.6. Programming</a>
+<li><a href="#orgc0a7ca7">6.6. Programming</a>
 <ul>
-<li><a href="#org6ac27de">6.6.1. Elisp Support</a></li>
-<li><a href="#orgdd1d77c">6.6.2. Python Support</a></li>
-<li><a href="#org01dbd64">6.6.3. Tramp + Conda</a></li>
+<li><a href="#orgc3070de">6.6.1. Elisp Support</a></li>
+<li><a href="#org91fcf93">6.6.2. Python Support</a></li>
+<li><a href="#org052f6b2">6.6.3. Tramp + Conda</a></li>
 </ul>
 </li>
-<li><a href="#org7aca963">6.7. Wrap up</a></li>
+<li><a href="#org7dd0818">6.7. Wrap up</a></li>
 </ul>
 </li>
-<li><a href="#org9ef38ca">7. Acknowledgements</a></li>
-<li><a href="#org01fe1f7">8. License</a></li>
+<li><a href="#org539bfa9">7. Acknowledgements</a></li>
+<li><a href="#org4f8cab8">8. License</a></li>
 </ul>
 </div>
 </div>
 <p>
-This file is a <a href="https://en.wikipedia.org/wiki/Literate_programming">literate program</a> for my emacs configuration. It details how to get started with my setup on macOS and Linux, which includes:
+This file is a <a href="https://en.wikipedia.org/wiki/Literate_programming">literate program</a> for my emacs configuration. It details how to get started with my setup on macOS and GNU/Linux, which includes:
 </p>
 <ul class="org-ul">
 <li>Installing emacs with GUI and web browsing support</li>
@@ -79,21 +79,21 @@ This file is also exported as a Github pages site <a href="https://bsarkar321.gi
 </p>
 
 
-<div id="orgc651977" class="figure">
+<div id="orgbb2000e" class="figure">
 <p><img src="emacs_icon.png" alt="emacs_icon.png" width="100px" />
 </p>
 </div>
 
-<div id="outline-container-orgf0feeca" class="outline-2">
-<h2 id="orgf0feeca"><span class="section-number-2">1.</span> Base Installation</h2>
+<div id="outline-container-org48b3c19" class="outline-2">
+<h2 id="org48b3c19"><span class="section-number-2">1.</span> Base Installation</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This section goes over the base installation procedure for vanilla emacs and LaTeX.
 </p>
 </div>
 
-<div id="outline-container-org45ec63a" class="outline-3">
-<h3 id="org45ec63a"><span class="section-number-3">1.1.</span> macOS</h3>
+<div id="outline-container-org59a8946" class="outline-3">
+<h3 id="org59a8946"><span class="section-number-3">1.1.</span> macOS</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 First, install command line developer tools and homebrew if it is not already installed.
@@ -101,7 +101,7 @@ First, install command line developer tools and homebrew if it is not already in
 
 <div class="org-src-container">
 <pre class="src src-bash">xcode-select --install
-/bin/bash -c <span style="color: #98C379;">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span>
+/bin/bash -c <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh</span><span style="color: #98C379;">)"</span>
 </pre>
 </div>
 
@@ -111,8 +111,8 @@ At this point, brew should be installed, but it may not be added to your path ye
 </p>
 
 <div class="org-src-container">
-<pre class="src src-bash">(<span style="color: #56B6C2;">echo</span>; <span style="color: #56B6C2;">echo</span> <span style="color: #98C379;">'eval "$(/opt/homebrew/bin/brew shellenv)"'</span>) &gt;&gt; ~/.zprofile
-<span style="color: #56B6C2;">eval</span> <span style="color: #98C379;">"$(/opt/homebrew/bin/brew shellenv)"</span>
+<pre class="src src-bash">(<span style="color: #56B6C2;">echo</span>; <span style="color: #56B6C2;">echo</span> <span style="color: #98C379;">'eval "$(</span><span style="color: #fa8072;">/opt/homebrew/bin/brew shellenv</span><span style="color: #98C379;">)"'</span>) &gt;&gt; ~/.zprofile
+<span style="color: #56B6C2;">eval</span> <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">/opt/homebrew/bin/brew shellenv</span><span style="color: #98C379;">)"</span>
 </pre>
 </div>
 </blockquote>
@@ -133,7 +133,7 @@ At this step, I also recommend installing basictex for pdflatex support.
 
 <div class="org-src-container">
 <pre class="src src-bash">brew install --cask basictex
-<span style="color: #56B6C2;">eval</span> <span style="color: #98C379;">"$(/usr/libexec/path_helper)"</span>
+<span style="color: #56B6C2;">eval</span> <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">/usr/libexec/path_helper</span><span style="color: #98C379;">)"</span>
 </pre>
 </div>
 
@@ -149,32 +149,94 @@ sudo tlmgr install wrapfig capt-of
 </div>
 </div>
 
-<div id="outline-container-org414d8b3" class="outline-3">
-<h3 id="org414d8b3"><span class="section-number-3">1.2.</span> Linux [WIP]</h3>
+<div id="outline-container-org95d3311" class="outline-3">
+<h3 id="org95d3311"><span class="section-number-3">1.2.</span> GNU/Linux</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
-Typically can be downloaded from package manager. Note that the latest "stable" version of linux may not have all the features used in this config. For arch-based distros, you can install <a href="https://aur.archlinux.org/packages/emacs-git">emacs-git</a> from the AUR.
+Before installing emacs, first install some dependencies using your package manager. In particular, we need imagemagick for pdf/image support and libgccjit for native compilation. Below I have instructions for pacman, the Arch package manager:
 </p>
+
+<div class="org-src-container">
+<pre class="src src-bash">sudo pacman -S imagemagick libgccjit
+</pre>
+</div>
+
+<p>
+I recommend building emacs from source to take advantage of all the features of emacs, like xwidgets, imagemagick, and native compilation support. Instructions from the official <a href="https://git.savannah.gnu.org/cgit/emacs.git/tree/INSTALL.REPO">emacs git repo</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #56B6C2;">cd</span> ~
+git clone https://git.savannah.gnu.org/git/emacs.git
+<span style="color: #56B6C2;">cd</span> emacs
+./autogen.sh
+./configure --with-xwidgets --with-imagemagick --with-native-compilation
+make -j
+sudo make install
+</pre>
+</div>
+
+<p>
+At this step, I also recommend installing a minimal version of TeX live following <a href="https://tug.org/texlive/quickinstall.html">these instructions</a>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #56B6C2;">cd</span> /tmp
+wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+zcat &lt; install-tl-unx.tar.gz | tar xf -
+<span style="color: #56B6C2;">cd</span> install-tl-*
+sudo perl ./install-tl --no-interaction --scheme=minimal
+</pre>
+</div>
+
+<p>
+You must add texlive to the path by editing your .bashrc file in the home directory by running the following command (assuming you are using the bash shell):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">sudo bash -c <span style="color: #98C379;">'(echo; echo "export PATH=\$PATH:/usr/local/texlive/2023/bin/x86_64-linux") &gt;&gt; /etc/profile'</span>
+</pre>
+</div>
+
+<p>
+To install packages during compilation failures, please refer to <a href="https://www.ctan.org/">CTAN</a> and install packages using tlmgr.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">sudo tlmgr update --self
+sudo tlmgr install wrapfig capt-of
+</pre>
+</div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org10ccc20" class="outline-2">
-<h2 id="org10ccc20"><span class="section-number-2">2.</span> Conda Setup</h2>
+<div id="outline-container-org49b050e" class="outline-2">
+<h2 id="org49b050e"><span class="section-number-2">2.</span> Conda Setup</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-To install miniconda, I used homebrew's miniconda cask:
+To install conda, I used homebrew's miniconda cask for macos:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bash">brew install --cask miniconda
-conda init <span style="color: #98C379;">"$(basename "${SHELL}")"</span>
+conda init <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">basename "${SHELL}"</span><span style="color: #98C379;">)"</span>
+</pre>
+</div>
+
+<p>
+On GNU/Linux, I used mambaforge directly:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">wget <span style="color: #98C379;">"https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(</span><span style="color: #fa8072;">uname</span><span style="color: #98C379;">)-$(</span><span style="color: #fa8072;">uname -m</span><span style="color: #98C379;">).sh"</span>
+bash Mambaforge-$(<span style="color: #fa8072;">uname</span>)-$(<span style="color: #fa8072;">uname -m</span>).sh
 </pre>
 </div>
 
 <blockquote>
 <p>
-After installing miniconda, remember to close and re-open your terminal. When you re-open it, you should be able to see <code>(base)</code> before your command line prompt, which confirms that miniconda is active.
+After installing conda, remember to close and re-open your terminal. When you re-open it, you should be able to see <code>(base)</code> before your command line prompt, which confirms that miniconda is active.
 </p>
 
 <p>
@@ -191,19 +253,28 @@ You will be able to activate and deactive this on the terminal, and integrate th
 </blockquote>
 
 <p>
-To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first.
+To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first for macos.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-bash">ln -s /opt/homebrew/Caskroom/miniconda/base/envs ~/.virtualenvs
 </pre>
 </div>
+
+<p>
+On GNU/Linux, you can link mambaforge directly instead:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">ln -s ~/mambaforge/envs ~/.virtualenvs
+</pre>
+</div>
 </div>
 </div>
 
 
-<div id="outline-container-orgcf98f1b" class="outline-2">
-<h2 id="orgcf98f1b"><span class="section-number-2">3.</span> Install this Config</h2>
+<div id="outline-container-org1ae0894" class="outline-2">
+<h2 id="org1ae0894"><span class="section-number-2">3.</span> Install this Config</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 If you have existing configuration files, I strongly recommend creating a backup of your .emacs.d directory. For instance, I just called <code>mv ~/.emacs.d ~/emacs_old</code> to save my old configuration.
@@ -219,8 +290,8 @@ Next, clone this repo and set up symbolic links so changes to this repo are refl
 
 mkdir ~/.emacs.d
 
-ln -s <span style="color: #98C379;">"$(pwd)"</span>/early-init.el ~/.emacs.d/early-init.el
-ln -s <span style="color: #98C379;">"$(pwd)"</span>/init.el ~/.emacs.d/init.el
+ln -s <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">pwd</span><span style="color: #98C379;">)"</span>/early-init.el ~/.emacs.d/early-init.el
+ln -s <span style="color: #98C379;">"$(</span><span style="color: #fa8072;">pwd</span><span style="color: #98C379;">)"</span>/init.el ~/.emacs.d/init.el
 </pre>
 </div>
 
@@ -235,7 +306,7 @@ When opening <code>README.org</code> you may see the following warning:
 
 <div class="org-src-container">
 <pre class="src src-bash">The local variables list<span style="color: #C678DD;"> in</span> README.org
-or .dir-locals.el contains values that may not be safe (*).
+or .dir-locals.el contains values that may not be safe (*)<span style="color: #56B6C2;">.</span>
 
 Do you want to apply it?  You can type
 y  -- to apply the local variables list.
@@ -256,8 +327,8 @@ This is a safety feature to prevent arbitrary code execution in emacs. If you cl
 </div>
 </div>
 
-<div id="outline-container-orgb17e081" class="outline-2">
-<h2 id="orgb17e081"><span class="section-number-2">4.</span> Tips for Using Emacs</h2>
+<div id="outline-container-org3abf2bd" class="outline-2">
+<h2 id="org3abf2bd"><span class="section-number-2">4.</span> Tips for Using Emacs</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 [WIP]
@@ -269,8 +340,8 @@ The rest of this file directly contains the code for the early-init and init fil
 </div>
 </div>
 
-<div id="outline-container-orgb1c3f62" class="outline-2">
-<h2 id="orgb1c3f62"><span class="section-number-2">5.</span> Early Init</h2>
+<div id="outline-container-org69bd640" class="outline-2">
+<h2 id="org69bd640"><span class="section-number-2">5.</span> Early Init</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 This early init uses some tricks from Doom Emacs to reduce startup time. It also changes the default frame at startup, which is faster than changing it after the frame is initialized. Specifically:
@@ -333,8 +404,8 @@ This early init uses some tricks from Doom Emacs to reduce startup time. It also
 </div>
 </div>
 
-<div id="outline-container-orgc49e4eb" class="outline-2">
-<h2 id="orgc49e4eb"><span class="section-number-2">6.</span> Init</h2>
+<div id="outline-container-orgc0ac6ec" class="outline-2">
+<h2 id="orgc0ac6ec"><span class="section-number-2">6.</span> Init</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 The code below gets constructed into the init.el, where most of the customization lies.
@@ -376,8 +447,8 @@ The code below gets constructed into the init.el, where most of the customizatio
 </div>
 </div>
 
-<div id="outline-container-org290adaf" class="outline-3">
-<h3 id="org290adaf"><span class="section-number-3">6.1.</span> Package Support</h3>
+<div id="outline-container-org9af4b65" class="outline-3">
+<h3 id="org9af4b65"><span class="section-number-3">6.1.</span> Package Support</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Here I define that melpa should be added to the package archives, which has a larger repository of user-created packages.
@@ -416,8 +487,8 @@ Here I define that melpa should be added to the package archives, which has a la
 </div>
 </div>
 
-<div id="outline-container-orgf87e0ef" class="outline-3">
-<h3 id="orgf87e0ef"><span class="section-number-3">6.2.</span> Basic Customization</h3>
+<div id="outline-container-org3ec032b" class="outline-3">
+<h3 id="org3ec032b"><span class="section-number-3">6.2.</span> Basic Customization</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 Adding basic customization options, like loading the theme and setting a custom-file so it does not conflict with this init file.
@@ -451,8 +522,8 @@ Adding basic customization options, like loading the theme and setting a custom-
 </div>
 </div>
 
-<div id="outline-container-orgad9ddf3" class="outline-3">
-<h3 id="orgad9ddf3"><span class="section-number-3">6.3.</span> macOS Support</h3>
+<div id="outline-container-org52f66f7" class="outline-3">
+<h3 id="org52f66f7"><span class="section-number-3">6.3.</span> macOS Support</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 Enables some mac-specific customization, including full screen with command-control-f, and commenting/uncommenting regions of code with command-/.
@@ -495,8 +566,8 @@ I also use command-option-&lt;arrow-keys&gt; to change the size of the focused w
 </div>
 </div>
 
-<div id="outline-container-org6c3e26d" class="outline-3">
-<h3 id="org6c3e26d"><span class="section-number-3">6.4.</span> Xwidgets Convenience functions</h3>
+<div id="outline-container-orgc91208f" class="outline-3">
+<h3 id="orgc91208f"><span class="section-number-3">6.4.</span> Xwidgets Convenience functions</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Use xwwp to have a browser within emacs.
@@ -510,7 +581,7 @@ Note: it is currently a big buggy, especially when multiple windows are created.
 <pre class="src src-elisp"><span class="linenr">108: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
 <span class="linenr">109: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">xwwp setup</span>
 <span class="linenr">110: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">===================================</span>
-<span class="linenr">111: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">xwwp</span>)
+<span class="linenr">111: </span>(<span style="color: #C678DD;">use-package</span> xwwp)
 <span class="linenr">112: </span>(<span style="color: #C678DD;">setq</span> xwwp-search-prefix <span style="color: #98C379;">"https://duckduckgo.com/?q="</span>)
 <span class="linenr">113: </span>
 </pre>
@@ -518,8 +589,8 @@ Note: it is currently a big buggy, especially when multiple windows are created.
 </div>
 </div>
 
-<div id="outline-container-orge2b05b5" class="outline-3">
-<h3 id="orge2b05b5"><span class="section-number-3">6.5.</span> Writing</h3>
+<div id="outline-container-orgcd68cb0" class="outline-3">
+<h3 id="orgcd68cb0"><span class="section-number-3">6.5.</span> Writing</h3>
 <div class="outline-text-3" id="text-6-5">
 <p>
 Enable line numbers, word wrap, and spell checking for text modes.
@@ -542,8 +613,8 @@ Enable line numbers, word wrap, and spell checking for text modes.
 </div>
 </div>
 
-<div id="outline-container-org85a1601" class="outline-4">
-<h4 id="org85a1601"><span class="section-number-4">6.5.1.</span> Org Mode</h4>
+<div id="outline-container-orga586a1a" class="outline-4">
+<h4 id="orga586a1a"><span class="section-number-4">6.5.1.</span> Org Mode</h4>
 <div class="outline-text-4" id="text-6-5-1">
 <p>
 Writing for org mode documents, like this configuration file! Enables opening web links within emacs, along with some other customization options to make org mode easier for me to work with.
@@ -556,7 +627,7 @@ Writing for org mode documents, like this configuration file! Enables opening we
 <span class="linenr">129: </span>(<span style="color: #C678DD;">setq</span> org-support-shift-select t)
 <span class="linenr">130: </span>(<span style="color: #C678DD;">setq</span> org-latex-listings t)
 <span class="linenr">131: </span>
-<span class="linenr">132: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">htmlize</span>)
+<span class="linenr">132: </span>(<span style="color: #C678DD;">use-package</span> htmlize)
 <span class="linenr">133: </span>(<span style="color: #C678DD;">setq</span> org-src-fontify-natively t)
 <span class="linenr">134: </span>(<span style="color: #C678DD;">setq</span> browse-url-browser-function 'xwidget-webkit-browse-url)
 <span class="linenr">135: </span>(<span style="color: #C678DD;">setq</span> org-file-apps
@@ -575,8 +646,8 @@ Writing for org mode documents, like this configuration file! Enables opening we
 </div>
 </div>
 
-<div id="outline-container-orgb4eeb33" class="outline-4">
-<h4 id="orgb4eeb33"><span class="section-number-4">6.5.2.</span> LaTeX</h4>
+<div id="outline-container-org2dd835c" class="outline-4">
+<h4 id="org2dd835c"><span class="section-number-4">6.5.2.</span> LaTeX</h4>
 <div class="outline-text-4" id="text-6-5-2">
 <p>
 Write LaTeX documents with support for previewing and syncing (like double clicking on overleaf previews).
@@ -589,7 +660,7 @@ Write LaTeX documents with support for previewing and syncing (like double click
 <span class="linenr">149: </span>
 <span class="linenr">150: </span>(add-hook 'eww-mode-hook 'pdf-tools-install)
 <span class="linenr">151: </span>
-<span class="linenr">152: </span>(<span style="color: #C678DD;">use-package</span> <span style="color: #56B6C2;">tex</span>
+<span class="linenr">152: </span>(<span style="color: #C678DD;">use-package</span> tex
 <span class="linenr">153: </span>  <span style="color: #56B6C2;">:ensure</span> auctex)
 <span class="linenr">154: </span>
 <span class="linenr">155: </span>(add-hook 'LaTeX-mode-hook
@@ -618,8 +689,8 @@ Write LaTeX documents with support for previewing and syncing (like double click
 </div>
 </div>
 
-<div id="outline-container-org7dafef6" class="outline-3">
-<h3 id="org7dafef6"><span class="section-number-3">6.6.</span> Programming</h3>
+<div id="outline-container-orgc0a7ca7" class="outline-3">
+<h3 id="orgc0a7ca7"><span class="section-number-3">6.6.</span> Programming</h3>
 <div class="outline-text-3" id="text-6-6">
 <p>
 Work with programming modes, even in remote systems using TRAMP.
@@ -635,8 +706,8 @@ Work with programming modes, even in remote systems using TRAMP.
 </div>
 </div>
 
-<div id="outline-container-org6ac27de" class="outline-4">
-<h4 id="org6ac27de"><span class="section-number-4">6.6.1.</span> Elisp Support</h4>
+<div id="outline-container-orgc3070de" class="outline-4">
+<h4 id="orgc3070de"><span class="section-number-4">6.6.1.</span> Elisp Support</h4>
 <div class="outline-text-4" id="text-6-6-1">
 <p>
 Elisp syntax checking for emacs configuration files.
@@ -650,8 +721,8 @@ Elisp syntax checking for emacs configuration files.
 </div>
 </div>
 
-<div id="outline-container-orgdd1d77c" class="outline-4">
-<h4 id="orgdd1d77c"><span class="section-number-4">6.6.2.</span> Python Support</h4>
+<div id="outline-container-org91fcf93" class="outline-4">
+<h4 id="org91fcf93"><span class="section-number-4">6.6.2.</span> Python Support</h4>
 <div class="outline-text-4" id="text-6-6-2">
 <p>
 Python with eglot as an LSP. Note that you may need to pip install a language server after activating a virtual environment.
@@ -666,8 +737,8 @@ Python with eglot as an LSP. Note that you may need to pip install a language se
 </div>
 </div>
 
-<div id="outline-container-org01dbd64" class="outline-4">
-<h4 id="org01dbd64"><span class="section-number-4">6.6.3.</span> Tramp + Conda</h4>
+<div id="outline-container-org052f6b2" class="outline-4">
+<h4 id="org052f6b2"><span class="section-number-4">6.6.3.</span> Tramp + Conda</h4>
 <div class="outline-text-4" id="text-6-6-3">
 <p>
 Connecting virtual environments on local and remote systems.
@@ -697,8 +768,8 @@ Connecting virtual environments on local and remote systems.
 </div>
 </div>
 
-<div id="outline-container-org7aca963" class="outline-3">
-<h3 id="org7aca963"><span class="section-number-3">6.7.</span> Wrap up</h3>
+<div id="outline-container-org7dd0818" class="outline-3">
+<h3 id="org7dd0818"><span class="section-number-3">6.7.</span> Wrap up</h3>
 <div class="outline-text-3" id="text-6-7">
 <div class="org-src-container">
 <pre class="src src-elisp"><span class="linenr">202: </span><span style="color: #5C6370; font-style: italic;">;; </span><span style="color: #5C6370; font-style: italic;">emacs -eval "(message (emacs-init-time))" -Q</span>
@@ -712,8 +783,8 @@ Connecting virtual environments on local and remote systems.
 </div>
 </div>
 
-<div id="outline-container-org9ef38ca" class="outline-2">
-<h2 id="org9ef38ca"><span class="section-number-2">7.</span> Acknowledgements</h2>
+<div id="outline-container-org539bfa9" class="outline-2">
+<h2 id="org539bfa9"><span class="section-number-2">7.</span> Acknowledgements</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Big thanks to:
@@ -730,8 +801,8 @@ Big thanks to:
 </div>
 
 
-<div id="outline-container-org01fe1f7" class="outline-2">
-<h2 id="org01fe1f7"><span class="section-number-2">8.</span> License</h2>
+<div id="outline-container-org4f8cab8" class="outline-2">
+<h2 id="org4f8cab8"><span class="section-number-2">8.</span> License</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 Copyright (C) 2023 Bidipta Sarkar
@@ -778,7 +849,7 @@ I know my LaTeX support was largely based on some website, but I can't find it a
 <div id="postamble" class="status">
 <p class="author">Author: Bidipta Sarkar</p>
 <p class="email">Email: <a href="mailto:bidiptas13@gmail.com">bidiptas13@gmail.com</a></p>
-<p class="date">Created: 2023-07-27 Thu 18:46</p>
+<p class="date">Created: 2023-08-16 Wed 19:08</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

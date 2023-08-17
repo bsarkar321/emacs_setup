@@ -1,4 +1,4 @@
-#+title: Emacs Setup for macOS and Linux
+#+title: Emacs Setup for macOS and GNU/Linux
 #+author: Bidipta Sarkar
 #+email: bidiptas13@gmail.com
 #+description: Org mode emacs setup
@@ -36,7 +36,7 @@
 
 #+latex: \clearpage
 
-This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate program]] for my emacs configuration. It details how to get started with my setup on macOS and Linux, which includes:
+This file is a [[https://en.wikipedia.org/wiki/Literate_programming][literate program]] for my emacs configuration. It details how to get started with my setup on macOS and GNU/Linux, which includes:
 - Installing emacs with GUI and web browsing support
 - Automatic reloading and html creation for the config
 - Support for conda virtual environments, including on virtual machines
@@ -98,21 +98,67 @@ To install packages during compilation failures, please refer to [[https://www.c
   sudo tlmgr install wrapfig capt-of
 #+end_src
 
-** Linux [WIP]
+** GNU/Linux
 
-Typically can be downloaded from package manager. Note that the latest "stable" version of linux may not have all the features used in this config. For arch-based distros, you can install [[https://aur.archlinux.org/packages/emacs-git][emacs-git]] from the AUR.
+Before installing emacs, first install some dependencies using your package manager. In particular, we need imagemagick for pdf/image support and libgccjit for native compilation. Below I have instructions for pacman, the Arch package manager:
+
+#+begin_src bash
+  sudo pacman -S imagemagick libgccjit
+#+end_src
+
+I recommend building emacs from source to take advantage of all the features of emacs, like xwidgets, imagemagick, and native compilation support. Instructions from the official [[https://git.savannah.gnu.org/cgit/emacs.git/tree/INSTALL.REPO][emacs git repo]].
+
+#+begin_src bash
+  cd ~
+  git clone https://git.savannah.gnu.org/git/emacs.git
+  cd emacs
+  ./autogen.sh
+  ./configure --with-xwidgets --with-imagemagick --with-native-compilation
+  make -j
+  sudo make install
+#+end_src
+
+At this step, I also recommend installing a minimal version of TeX live following [[https://tug.org/texlive/quickinstall.html][these instructions]]:
+
+#+begin_src bash
+  cd /tmp
+  wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+  zcat < install-tl-unx.tar.gz | tar xf -
+  cd install-tl-*
+  sudo perl ./install-tl --no-interaction --scheme=minimal
+#+end_src
+
+You must add texlive to the path by editing your .bashrc file in the home directory by running the following command (assuming you are using the bash shell):
+
+#+begin_src bash
+  sudo bash -c '(echo; echo "export PATH=\$PATH:/usr/local/texlive/2023/bin/x86_64-linux") >> /etc/profile'
+#+end_src
+
+To install packages during compilation failures, please refer to [[https://www.ctan.org/][CTAN]] and install packages using tlmgr.
+
+#+begin_src bash
+  sudo tlmgr update --self
+  sudo tlmgr install wrapfig capt-of
+#+end_src
 
 * Conda Setup
 
-To install miniconda, I used homebrew's miniconda cask:
+To install conda, I used homebrew's miniconda cask for macos:
 
 #+begin_src bash
   brew install --cask miniconda
   conda init "$(basename "${SHELL}")"
 #+end_src
 
+On GNU/Linux, I used mambaforge directly:
+
+#+begin_src bash
+    wget "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+    bash Mambaforge-$(uname)-$(uname -m).sh
+#+end_src
+
 #+begin_quote
-After installing miniconda, remember to close and re-open your terminal. When you re-open it, you should be able to see =(base)= before your command line prompt, which confirms that miniconda is active.
+After installing conda, remember to close and re-open your terminal. When you re-open it, you should be able to see =(base)= before your command line prompt, which confirms that miniconda is active.
 
 I would also recommend creating a test environment in madrona, as follows:
 #+begin_src bash
@@ -122,10 +168,16 @@ I would also recommend creating a test environment in madrona, as follows:
 You will be able to activate and deactive this on the terminal, and integrate this environment (along with new and existing conda environments) into emacs.r
 #+end_quote
 
-To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first.
+To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first for macos.
 
 #+begin_src bash
   ln -s /opt/homebrew/Caskroom/miniconda/base/envs ~/.virtualenvs
+#+end_src
+
+On GNU/Linux, you can link mambaforge directly instead:
+
+#+begin_src bash
+  ln -s ~/mambaforge/envs ~/.virtualenvs
 #+end_src
 
 
