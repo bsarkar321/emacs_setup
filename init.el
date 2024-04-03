@@ -23,10 +23,20 @@
   (defvar TeX-source-correlate-mode)
   (defvar reftex-plug-into-AUCTeX)
   (defvar reftex-bibliography-commands)
+
+  (defvar markdown-command)
+  (defvar LaTeX-mode-map)
+  (defvar corfu-map)
+  (defvar corfu-popupinfo-delay)
+  (defvar tramp-use-ssh-controlmaster-options)
+  (defvar tramp-verbose)
+
   (declare-function pdf-loader-install nil)
   (declare-function TeX-revert-document-buffer nil)
   (declare-function pyvenv-mode nil)
   (declare-function pyvenv-workon-home nil)
+  (declare-function global-corfu-mode nil)
+  (declare-function corfu-popupinfo-mode nil)
   )
 
 ;; ===================================
@@ -176,6 +186,7 @@
 	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
 	    (setq reftex-plug-into-AUCTeX t)
 	    (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	    (define-key LaTeX-mode-map (kbd "$") 'self-insert-command)
 	    )
 	  )
 
@@ -243,6 +254,9 @@
 (setq tramp-use-ssh-controlmaster-options nil)
 (setq exec-path (append exec-path '("/afs/.ir/users/b/i/bidiptas/bin")))
 (setq tramp-verbose 6)
+
+(add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
+(add-hook 'c++-mode-hook 'eglot-ensure)
 
 (add-to-list 'auto-mode-alist '("\\.pde\\'" . java-mode))
 

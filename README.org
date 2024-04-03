@@ -312,10 +312,20 @@ The code below gets constructed into the init.el, where most of the customizatio
     (defvar TeX-source-correlate-mode)
     (defvar reftex-plug-into-AUCTeX)
     (defvar reftex-bibliography-commands)
+
+    (defvar markdown-command)
+    (defvar LaTeX-mode-map)
+    (defvar corfu-map)
+    (defvar corfu-popupinfo-delay)
+    (defvar tramp-use-ssh-controlmaster-options)
+    (defvar tramp-verbose)
+    
     (declare-function pdf-loader-install nil)
     (declare-function TeX-revert-document-buffer nil)
     (declare-function pyvenv-mode nil)
     (declare-function pyvenv-workon-home nil)
+    (declare-function global-corfu-mode nil)
+    (declare-function corfu-popupinfo-mode nil)
     )
 
 #+end_src
@@ -525,6 +535,7 @@ Write LaTeX documents with support for previewing and syncing (like double click
 	      (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
 	      (setq reftex-plug-into-AUCTeX t)
 	      (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	      (define-key LaTeX-mode-map (kbd "$") 'self-insert-command)
 	      )
 	    )
 
@@ -598,7 +609,6 @@ Python with eglot as an LSP. Note that you may need to pip install a language se
 						     :live_mode :json-false)))
 	      ))
 
-
 #+end_src
 
 *** Tramp + Conda
@@ -624,11 +634,21 @@ Connecting virtual environments on local and remote systems.
   
 #+end_src
 
+*** C/C++/CUDA
+
+Add support for CUDA and C/C++. When using cmake remember to do =cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1= so the lsp has enough information to avoid incorrect errors.
+#+begin_src elisp +n :tangle init.el
+  (add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
+  (add-hook 'c++-mode-hook 'eglot-ensure)
+  
+#+end_src
+
 *** Processing (Art)
 
 Add support for Processing files (Java)
 #+begin_src elisp +n :tangle init.el
   (add-to-list 'auto-mode-alist '("\\.pde\\'" . java-mode))
+  
 #+end_src
 
 ** Wrap up
