@@ -43,8 +43,11 @@
 
 (defvar my-packages
   '(atom-one-dark-theme  ;; melpa
+    corfu
+    jupyter              ;; melpa
     htmlize
     magit
+    markdown-mode
     pdf-tools
     pyvenv               ;; melpa
     use-package
@@ -143,6 +146,12 @@
 			       (shell . t)
 			       ))
 
+;; Markdown support
+(use-package markdown-mode
+  :ensure t
+  :mode ("README\\.md\\'" . gfm-mode)
+  :init (setq markdown-command "multimarkdown"))
+
 ;; Latex support
 (pdf-loader-install)
 (add-hook 'pdf-view-mode-hook 'pdf-view-dark-minor-mode)
@@ -177,6 +186,34 @@
 ;; ===================================
 (add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; Show line numbers for programming languages
 
+(use-package corfu
+  :custom
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                 ;; Enable auto completion
+  ;; (corfu-separator ?\s)          ;; Orderless field separator
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+  :bind
+  (:map corfu-map
+      ;; Option 1: Unbind RET completely
+      ("RET" . nil))
+  :init
+  (global-corfu-mode))
+
+(use-package corfu-popupinfo
+  :init
+  (corfu-popupinfo-mode)
+  (setq corfu-popupinfo-delay '(1.0 . 0.1)))
+
+(use-package emacs
+  :init
+  (setq completion-cycle-threshold 3))
+
 (add-hook 'emacs-lisp-mode-hook 'flymake-mode)
 
 ;; Python with eglot
@@ -198,6 +235,8 @@
 (setq tramp-controlmaster-options "-o ControlMaster=auto -o ControlPersist=no")
 (setq exec-path (append exec-path '("/afs/.ir/users/b/i/bidiptas/bin")))
 (setq tramp-verbose 6)
+
+(add-to-list 'auto-mode-alist '("\\.pde\\'" . java-mode))
 
 ;; emacs -eval "(message (emacs-init-time))" -Q
 (message (emacs-init-time))
