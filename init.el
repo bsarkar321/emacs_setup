@@ -218,6 +218,15 @@
 
 ;; Python with eglot
 (add-hook 'python-mode-hook 'eglot-ensure)
+(setq-default eglot-workspace-configuration
+	  '(:pylsp (:skip_token_initialization t
+		    :plugins (:jedi_completion (:include_params t
+						:fuzzy t)
+			      :pyflakes (:enabled :json-false)
+			      :pylint (:enabled t)
+			      :pylsp_mypy (:enabled t
+						   :live_mode :json-false)))
+	    ))
 
 ;; Conda and TRAMP setup
 
@@ -232,7 +241,6 @@
 (advice-add #'pyvenv-workon-home :before #'tramp-conda-setup)
 
 (setq tramp-use-ssh-controlmaster-options nil)
-(setq tramp-controlmaster-options "-o ControlMaster=auto -o ControlPersist=no")
 (setq exec-path (append exec-path '("/afs/.ir/users/b/i/bidiptas/bin")))
 (setq tramp-verbose 6)
 
