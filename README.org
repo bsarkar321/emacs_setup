@@ -358,6 +358,7 @@ Here I define that melpa should be added to the package archives, which has a la
       pyvenv               ;; melpa
       use-package
       xwwp                 ;; melpa
+      processing-mode      ;; melpa
       ))
 
   ;; Iterate on packages and install missing ones
@@ -647,8 +648,10 @@ Add support for CUDA and C/C++. When using cmake remember to do =cmake -DCMAKE_E
 
 Add support for Processing files (Java)
 #+begin_src elisp +n :tangle init.el
-  (add-to-list 'auto-mode-alist '("\\.pde\\'" . java-mode))
-  
+  (setq processing-location "/usr/local/bin/processing-java")
+  (setq processing-application-dir "/Applications/Processing.app")
+  (setq processing-sketchbook-dir "~/Documents/Processing")
+
 #+end_src
 
 ** Wrap up

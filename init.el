@@ -62,6 +62,7 @@
     pyvenv               ;; melpa
     use-package
     xwwp                 ;; melpa
+    processing-mode      ;; melpa
     ))
 
 ;; Iterate on packages and install missing ones
@@ -258,7 +259,9 @@
 (add-to-list 'auto-mode-alist '("\\.cu\\'" . c++-mode))
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
-(add-to-list 'auto-mode-alist '("\\.pde\\'" . java-mode))
+(setq processing-location "/usr/local/bin/processing-java")
+(setq processing-application-dir "/Applications/Processing.app")
+(setq processing-sketchbook-dir "~/Documents/Processing")
 
 ;; emacs -eval "(message (emacs-init-time))" -Q
 (message (emacs-init-time))
