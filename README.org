@@ -598,17 +598,14 @@ Elisp syntax checking for emacs configuration files.
 Python with eglot as an LSP. Note that you may need to pip install a language server after activating a virtual environment.
 
 #+begin_src elisp +n :tangle init.el
-  ;; Python with eglot
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (setq-default eglot-workspace-configuration
-	    '(:pylsp (:skip_token_initialization t
-		      :plugins (:jedi_completion (:include_params t
-						  :fuzzy t)
-				:pyflakes (:enabled :json-false)
-				:pylint (:enabled t)
-				:pylsp_mypy (:enabled t
-						     :live_mode :json-false)))
-	      ))
+    ;; Python with eglot
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    (setq-default eglot-workspace-configuration
+	      '(:pylsp (:skip_token_initialization t
+			:plugins (:ruff (:enabled t
+						  :formatEnabled t)
+				  :pylsp_mypy (:enabled t)))
+		))
 
 #+end_src
 

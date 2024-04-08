@@ -22,3 +22,10 @@ w = torch.zeros((10, 10), device="cuda")
 z = 10
 if z % 2 == 0:
     z = 20
+
+
+lst = []
+for i in range(100):
+    lst.append(i)
+
+print(lst)

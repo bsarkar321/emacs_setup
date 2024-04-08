@@ -232,12 +232,9 @@
 (add-hook 'python-mode-hook 'eglot-ensure)
 (setq-default eglot-workspace-configuration
 	  '(:pylsp (:skip_token_initialization t
-		    :plugins (:jedi_completion (:include_params t
-						:fuzzy t)
-			      :pyflakes (:enabled :json-false)
-			      :pylint (:enabled t)
-			      :pylsp_mypy (:enabled t
-						   :live_mode :json-false)))
+		    :plugins (:ruff (:enabled t
+					      :formatEnabled t)
+			      :pylsp_mypy (:enabled t)))
 	    ))
 
 ;; Conda and TRAMP setup
