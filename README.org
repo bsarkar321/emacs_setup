@@ -599,7 +599,7 @@ Python with eglot as an LSP. Note that you may need to pip install a language se
 
 #+begin_src elisp +n :tangle init.el
     ;; Python with eglot
-    (add-hook 'python-mode-hook 'eglot-ensure)
+    ;; (add-hook 'python-mode-hook 'eglot-ensure)
     (setq-default eglot-workspace-configuration
 	      '(:pylsp (:skip_token_initialization t
 			:plugins (:ruff (:enabled t

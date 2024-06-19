@@ -229,7 +229,7 @@
 (add-hook 'emacs-lisp-mode-hook 'flymake-mode)
 
 ;; Python with eglot
-(add-hook 'python-mode-hook 'eglot-ensure)
+;; (add-hook 'python-mode-hook 'eglot-ensure)
 (setq-default eglot-workspace-configuration
 	  '(:pylsp (:skip_token_initialization t
 		    :plugins (:ruff (:enabled t
