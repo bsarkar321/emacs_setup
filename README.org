@@ -95,7 +95,7 @@ To install packages during compilation failures, please refer to [[https://www.c
 
 #+begin_src bash
   sudo tlmgr update --self
-  sudo tlmgr install wrapfig capt-of
+  sudo tlmgr install wrapfig capt-of ulem etoolbox listings
 #+end_src
 
 ** GNU/Linux
@@ -118,6 +118,8 @@ I recommend building emacs from source to take advantage of all the features of 
   sudo make install
 #+end_src
 
+If webkit does not work, you may need to set =export WEBKIT_DISABLE_COMPOSITING_MODE=1= in your =~/.bashrc= to load webpages instead of showing a white screen.
+
 At this step, I also recommend installing a minimal version of TeX live following [[https://tug.org/texlive/quickinstall.html][these instructions]]:
 
 #+begin_src bash
@@ -125,20 +127,22 @@ At this step, I also recommend installing a minimal version of TeX live followin
   wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
   zcat < install-tl-unx.tar.gz | tar xf -
   cd install-tl-*
-  sudo perl ./install-tl --no-interaction --scheme=minimal
+  sudo perl ./install-tl --no-interaction --scheme=basic
 #+end_src
 
 You must add texlive to the path by editing your .bashrc file in the home directory by running the following command (assuming you are using the bash shell):
 
 #+begin_src bash
-  sudo bash -c '(echo; echo "export PATH=\$PATH:/usr/local/texlive/2023/bin/x86_64-linux") >> /etc/profile'
+  sudo bash -c '(echo; echo "export PATH=\$PATH:/usr/local/texlive/2024/bin/x86_64-linux") >> /etc/profile'
 #+end_src
+
+To allow the user to run texlive commands (like tlmgr and pdflatex), run =sudo chown -R [username] /usr/local/texlive= which gives ownership to your user.
 
 To install packages during compilation failures, please refer to [[https://www.ctan.org/][CTAN]] and install packages using tlmgr.
 
 #+begin_src bash
-  sudo tlmgr update --self
-  sudo tlmgr install wrapfig capt-of
+  tlmgr update --self
+  tlmgr install wrapfig capt-of
 #+end_src
 
 * Conda Setup
@@ -153,8 +157,8 @@ To install conda, I used homebrew's miniconda cask for macos:
 On GNU/Linux, I used mambaforge directly:
 
 #+begin_src bash
-    wget "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
-    bash Mambaforge-$(uname)-$(uname -m).sh
+    wget "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
+    bash Miniforge3-$(uname)-$(uname -m).sh
 #+end_src
 
 #+begin_quote
@@ -177,7 +181,7 @@ To use virtual environments, first ensure that there is a symbolic link from the
 On GNU/Linux, you can link mambaforge directly instead:
 
 #+begin_src bash
-  ln -s ~/mambaforge/envs ~/.virtualenvs
+  ln -s ~/miniforge3/envs ~/.virtualenvs
 #+end_src
 
 
@@ -476,21 +480,21 @@ Writing for org mode documents, like this configuration file! Enables opening we
   (setq org-image-actual-width 500)
   (add-hook 'org-mode-hook #'human-text-on)
   (setq org-support-shift-select t)
-  (setq org-latex-listings t)
+  (setq org-latex-src-block-backend 'listings)
 
   (use-package htmlize)
   (setq org-src-fontify-natively t)
   (setq browse-url-browser-function 'xwidget-webkit-browse-url)
   (setq org-file-apps
-	'((auto-mode . emacs)
-	  ("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
-	  ("\\.mp4\\'" . "vlc \"%s\"")))
+  	'((auto-mode . emacs)
+  	  ("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
+  	  ("\\.mp4\\'" . "vlc \"%s\"")))
 
   (org-babel-do-load-languages 'org-babel-load-languages
-			       '(
-				 (python . t)
-				 (shell . t)
-				 ))
+  			       '(
+  				 (python . t)
+  				 (shell . t)
+  				 ))
 
 #+end_src
 

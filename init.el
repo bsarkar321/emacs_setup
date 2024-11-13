@@ -30,7 +30,7 @@
   (defvar corfu-popupinfo-delay)
   (defvar tramp-use-ssh-controlmaster-options)
   (defvar tramp-verbose)
-
+  
   (declare-function pdf-loader-install nil)
   (declare-function TeX-revert-document-buffer nil)
   (declare-function pyvenv-mode nil)
@@ -96,8 +96,8 @@
 ;; macOS Default Keys
 ;; ===================================
 (setq mac-option-modifier 'meta
-      mac-command-modifier 'super
-      mac-right-option-modifier 'meta)
+	mac-command-modifier 'super
+	mac-right-option-modifier 'meta)
 
 (when (string= system-type "darwin") (defvar dired-use-ls-dired nil))
 
@@ -106,8 +106,8 @@
   (interactive)
   (let (beg end)
     (if (region-active-p)
-	(setq beg (region-beginning) end (region-end))
-      (setq beg (line-beginning-position) end (line-end-position)))
+	  (setq beg (region-beginning) end (region-end))
+	(setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
 
 (global-set-key (kbd "s-Z") 'undo-redo)
@@ -141,21 +141,21 @@
 (setq org-image-actual-width 500)
 (add-hook 'org-mode-hook #'human-text-on)
 (setq org-support-shift-select t)
-(setq org-latex-listings t)
+(setq org-latex-src-block-backend 'listings)
 
 (use-package htmlize)
 (setq org-src-fontify-natively t)
 (setq browse-url-browser-function 'xwidget-webkit-browse-url)
 (setq org-file-apps
-      '((auto-mode . emacs)
-	("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
-	("\\.mp4\\'" . "vlc \"%s\"")))
+	'((auto-mode . emacs)
+	  ("\\.x?html?\\'" . (lambda (file link) (xwidget-webkit-browse-url (concat "file://" link))))
+	  ("\\.mp4\\'" . "vlc \"%s\"")))
 
 (org-babel-do-load-languages 'org-babel-load-languages
-			     '(
-			       (python . t)
-			       (shell . t)
-			       ))
+			       '(
+				 (python . t)
+				 (shell . t)
+				 ))
 
 ;; Markdown support
 (use-package markdown-mode
@@ -173,23 +173,23 @@
   :ensure auctex)
 
 (add-hook 'LaTeX-mode-hook
-	  (lambda()
-	    (turn-on-reftex)
-	    (flyspell-mode)
-	    (setq TeX-auto-save t)
-	    (setq TeX-parse-self t)
-	    (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-		  TeX-source-correlate-start-server t)
-	    (setq TeX-source-correlate-method 'synctex)
+	    (lambda()
+	      (turn-on-reftex)
+	      (flyspell-mode)
+	      (setq TeX-auto-save t)
+	      (setq TeX-parse-self t)
+	      (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+		    TeX-source-correlate-start-server t)
+	      (setq TeX-source-correlate-method 'synctex)
 
-	    (setq TeX-source-correlate-mode t)
-	    (setq-default TeX-master nil)
-	    (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
-	    (setq reftex-plug-into-AUCTeX t)
-	    (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
-	    (define-key LaTeX-mode-map (kbd "$") 'self-insert-command)
+	      (setq TeX-source-correlate-mode t)
+	      (setq-default TeX-master nil)
+	      (global-set-key (kbd "C-c C-g") 'pdf-sync-forward-search)
+	      (setq reftex-plug-into-AUCTeX t)
+	      (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
+	      (define-key LaTeX-mode-map (kbd "$") 'self-insert-command)
+	      )
 	    )
-	  )
 
 (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
 
@@ -212,8 +212,8 @@
 
   :bind
   (:map corfu-map
-      ;; Option 1: Unbind RET completely
-      ("RET" . nil))
+	;; Option 1: Unbind RET completely
+	("RET" . nil))
   :init
   (global-corfu-mode))
 
@@ -231,11 +231,11 @@
 ;; Python with eglot
 ;; (add-hook 'python-mode-hook 'eglot-ensure)
 (setq-default eglot-workspace-configuration
-	  '(:pylsp (:skip_token_initialization t
-		    :plugins (:ruff (:enabled t
-					      :formatEnabled t)
-			      :pylsp_mypy (:enabled t)))
-	    ))
+	      '(:pylsp (:skip_token_initialization t
+			:plugins (:ruff (:enabled t
+						  :formatEnabled t)
+				  :pylsp_mypy (:enabled t)))
+		))
 
 ;; Conda and TRAMP setup
 
@@ -244,8 +244,8 @@
 (defun tramp-conda-setup()
   "Set up conda for tramp."
   (when default-directory (if (file-remote-p default-directory)
-			      (setenv "WORKON_HOME" (concat (file-remote-p default-directory) "~/.virtualenvs"))
-			    (setenv "WORKON_HOME" "~/.virtualenvs"))))
+				(setenv "WORKON_HOME" (concat (file-remote-p default-directory) "~/.virtualenvs"))
+			      (setenv "WORKON_HOME" "~/.virtualenvs"))))
 
 (advice-add #'pyvenv-workon-home :before #'tramp-conda-setup)
 
