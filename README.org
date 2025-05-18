@@ -81,7 +81,8 @@ Next, install [[https://github.com/d12frosted/homebrew-emacs-plus][emacs-plus]].
 
 #+begin_src bash
   brew tap d12frosted/emacs-plus
-  brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-native-comp --with-poll --with-modern-alecive-flatwoken-icon
+  brew install emacs-plus@30 --with-ctags --with-xwidgets --with-imagemagick --with-modern-alecive-flatwoken-icon
+  osascript -e 'tell application "Finder" to make alias file to posix file "/opt/homebrew/opt/emacs-plus@30/Emacs.app" at posix file "/Applications" with properties {name:"Emacs.app"}'
 #+end_src
 
 At this step, I also recommend installing basictex for pdflatex support.
@@ -169,7 +170,7 @@ I would also recommend creating a test environment in madrona, as follows:
   conda create -n testenv python=3.10
 #+end_src
 
-You will be able to activate and deactive this on the terminal, and integrate this environment (along with new and existing conda environments) into emacs.r
+You will be able to activate and deactive this on the terminal, and integrate this environment (along with new and existing conda environments) into emacs
 #+end_quote
 
 To use virtual environments, first ensure that there is a symbolic link from the directory to the ~/.virtualenvs directory. Since I installed miniconda through homebrew, I needed to run the following script first for macos.
